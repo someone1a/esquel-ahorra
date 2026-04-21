@@ -35,6 +35,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (storedToken && storedUser) {
         setToken(storedToken);
         setUser(JSON.parse(storedUser));
+        
+        // Validar el token con el backend al iniciar
+        try {
+          const userData = await authService.getMe();
+          setUser(userData);
+          await storage.setItem(USER_KEY, JSON.stringify(userData));
+        } catch (error: any) {
+          console.error("Token invalid or expired on boot:", error);
+          // Si el error es 401, limpiar la sesión
+          if (error.message === "Unauthorized" || error.status === 401) {
+            await logout();
+          }
+        }
       }
     } catch (error) {
       console.error("Error loading auth data:", error);

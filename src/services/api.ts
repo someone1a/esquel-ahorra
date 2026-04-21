@@ -24,8 +24,9 @@ export const api = {
 
     if (response.status === 401) {
       // Handle unauthorized (maybe logout or refresh token)
-      // For now, let's just throw
-      throw new Error("Unauthorized");
+      const error = new Error("Unauthorized") as any;
+      error.status = 401;
+      throw error;
     }
 
     if (!response.ok) {
