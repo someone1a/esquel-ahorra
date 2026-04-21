@@ -1,0 +1,201 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { router, Redirect } from "expo-router";
+import React from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { IconSymbol } from "@/components/ui/icon-symbol";
+import { productsService } from "@/services/products";
+import { PriceCorrection } from "@/types/products";
+import { useAuth } from "@/store/auth-context";
+
+export default function PendingCorrectionsScreen() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  if (user?.rol?.toLowerCase() !== "supervisor") {
+    return <Redirect href="/" />;
+  }
+
+  const { data: corrections, isLoading, refetch } = useQuery({
+    queryKey: ["pending-corrections"],
+    queryFn: productsService.getPendingCorrections,
+  });
+
+  const approveMutation = useMutation({
+    mutationFn: (id: number) => productsService.approveCorrection(id),
+    onSuccess: () => {
+      Alert.alert("Éxito", "Corrección aprobada correctamente");
+      queryClient.invalidateQueries({ queryKey: ["pending-corrections"] });
+    },
+    onError: (error: any) => {
+      Alert.alert("Error", error.message || "No se pudo aprobar la corrección");
+    },
+  });
+
+  const handleApprove = (id: number) => {
+    Alert.alert(
+      "Aprobar Corrección",
+      "¿Estás seguro de que quieres aprobar este cambio de precio?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        { text: "Aprobar", onPress: () => approveMutation.mutate(id) },
+      ]
+    );
+  };
+
+  const renderItem = ({ item }: { item: PriceCorrection }) => (
+    <View style={styles.card}>
+      <View style={styles.cardHeader}>
+        <ThemedText type="defaultSemiBold">ID: {item.product_id}</ThemedText>
+        <ThemedText style={styles.timestamp}>
+          {new Date(item.timestamp).toLocaleDateString()}
+        </ThemedText>
+      </View>
+
+      <View style={styles.pricesRow}>
+        <View style={styles.priceCol}>
+          <ThemedText style={styles.priceLabel}>Precio Anterior</ThemedText>
+          <ThemedText style={styles.oldPrice}>${item.old_price}</ThemedText>
+        </View>
+        <IconSymbol name="arrow.right" size={20} color="#9CA3AF" />
+        <View style={styles.priceCol}>
+          <ThemedText style={styles.priceLabel}>Precio Nuevo</ThemedText>
+          <ThemedText style={styles.newPrice}>${item.new_price}</ThemedText>
+        </View>
+      </View>
+
+      <TouchableOpacity
+        style={styles.approveButton}
+        onPress={() => handleApprove(item.id)}
+        disabled={approveMutation.isPending}
+      >
+        <ThemedText style={styles.approveButtonText}>
+          {approveMutation.isPending ? "Aprobando..." : "Aprobar Cambio"}
+        </ThemedText>
+      </TouchableOpacity>
+    </View>
+  );
+
+  return (
+    <ThemedView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <IconSymbol name="chevron.left" size={24} color="#111827" />
+        </TouchableOpacity>
+        <ThemedText type="subtitle">Correcciones Pendientes</ThemedText>
+      </View>
+
+      {isLoading ? (
+        <View style={styles.center}>
+          <ActivityIndicator size="large" color="#2563EB" />
+        </View>
+      ) : (
+        <FlatList
+          data={corrections}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          contentContainerStyle={styles.list}
+          ListEmptyComponent={
+            <View style={styles.center}>
+              <ThemedText>No hay correcciones pendientes</ThemedText>
+            </View>
+          }
+          refreshing={isLoading}
+          onRefresh={refetch}
+        />
+      )}
+    </ThemedView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 60,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    marginBottom: 20,
+  },
+  backButton: {
+    marginRight: 16,
+  },
+  list: {
+    padding: 16,
+  },
+  card: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  timestamp: {
+    fontSize: 12,
+    color: "#6B7280",
+  },
+  pricesRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#F3F4F6",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  priceCol: {
+    alignItems: "center",
+    flex: 1,
+  },
+  priceLabel: {
+    fontSize: 11,
+    color: "#6B7280",
+    marginBottom: 4,
+  },
+  oldPrice: {
+    fontSize: 18,
+    color: "#EF4444",
+    textDecorationLine: "line-through",
+  },
+  newPrice: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#10B981",
+  },
+  approveButton: {
+    backgroundColor: "#2563EB",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  approveButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 50,
+  },
+});
