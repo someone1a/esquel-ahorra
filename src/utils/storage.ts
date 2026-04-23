@@ -38,4 +38,18 @@ export const storage = {
       await SecureStore.deleteItemAsync(key);
     }
   },
+
+  async clear() {
+    if (Platform.OS === "web") {
+      try {
+        localStorage.clear();
+      } catch (error) {
+        console.error("Error clearing localStorage:", error);
+      }
+    } else {
+      // SecureStore no tiene un método clear() global, 
+      // pero por ahora limpiamos las llaves conocidas si fuera necesario.
+      // O simplemente no hacemos nada si no es web.
+    }
+  },
 };

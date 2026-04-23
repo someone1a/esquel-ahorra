@@ -1,4 +1,5 @@
 import { storage } from "@/utils/storage";
+import { Platform } from "react-native";
 
 export const API_BASE_URL = "https://api.esquel-ahorra.online";
 const TOKEN_KEY = "auth_token";
@@ -23,7 +24,11 @@ export const api = {
     });
 
     if (response.status === 401) {
-      // Handle unauthorized (maybe logout or refresh token)
+      // Si recibimos un 401 (No autorizado) en la web, forzamos cierre total
+      if (Platform.OS === "web") {
+        await storage.clear();
+        window.location.replace("/welcome");
+      }
       const error = new Error("Unauthorized") as any;
       error.status = 401;
       throw error;

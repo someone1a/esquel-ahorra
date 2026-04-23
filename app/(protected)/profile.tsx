@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -17,7 +17,9 @@ export default function ProfileScreen() {
         style: "destructive",
         onPress: async () => {
           await logout();
-          router.replace("/welcome");
+          if (Platform.OS !== "web") {
+            router.replace("/welcome");
+          }
         },
       },
     ]);

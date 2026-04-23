@@ -2,6 +2,7 @@ import { authService } from "@/services/auth";
 import { Token, User } from "@/types/auth";
 import { storage } from "@/utils/storage";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { Platform } from "react-native";
 
 interface AuthContextType {
   user: User | null;
@@ -86,9 +87,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setToken(null);
     setUser(null);
 
-    await storage.removeItem(TOKEN_KEY);
-    await storage.removeItem(REFRESH_TOKEN_KEY);
-    await storage.removeItem(USER_KEY);
+    if (Platform.OS === "web") {
+      await storage.clear();
+      // En web, hacemos un redireccionamiento completo para limpiar TODO el estado (React Query, etc)
+      window.location.replace("/welcome");
+    } else {
+      await storage.removeItem(TOKEN_KEY);
+      await storage.removeItem(REFRESH_TOKEN_KEY);
+      await storage.removeItem(USER_KEY);
+    }
   };
 
   return (
