@@ -1,7 +1,7 @@
 import { storage } from "@/utils/storage";
 import { Platform } from "react-native";
 
-export const API_BASE_URL = "http://192.168.10.107:8000";
+export const API_BASE_URL = "https://api.esquel-ahorra.online";
 const TOKEN_KEY = "auth_token";
 
 async function getAuthToken() {
