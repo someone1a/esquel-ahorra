@@ -28,3 +28,16 @@ export interface RegisterRequest {
   confirm_password: string;
   rol: string;
 }
+
+export interface ActivateRequest {
+   token: string;
+   password: string;
+   confirm_password: string;
+ }
+ 
+ export interface ValidateTokenResponse {
+   valid: boolean;
+   message?: string;
+   email?: string;
+   expires_at?: string;
+ }

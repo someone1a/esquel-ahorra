@@ -26,9 +26,10 @@ export default function ProtectedLayout() {
   }
 
   const isSupervisor = user?.rol?.toLowerCase() === "supervisor";
-
-  return (
-    <Tabs
+   const isAdmin = user?.rol?.toLowerCase() === "admin";
+ 
+   return (
+     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
@@ -73,18 +74,30 @@ export default function ProtectedLayout() {
       />
       
       {/* Panel de Supervisor - Solo se muestra en la barra si es supervisor */}
-      <Tabs.Screen
-        name="supervisor/index"
-        options={{
-          title: "Panel",
-          href: isSupervisor ? "/supervisor/" : null,
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="lock.shield.fill" color={color} />
-          ),
-        }}
-      />
-      
-      {/* Otras pantallas de supervisor siempre ocultas de la barra inferior */}
+       <Tabs.Screen
+         name="supervisor/index"
+         options={{
+           title: "Panel",
+           href: isSupervisor ? "/supervisor/" : null,
+           tabBarIcon: ({ color }) => (
+             <IconSymbol size={28} name="shield.fill" color={color} />
+           ),
+         }}
+       />
+       
+       {/* Panel de Admin - Solo se muestra en la barra si es admin */}
+       <Tabs.Screen
+         name="admin/index"
+         options={{
+           title: "Admin",
+           href: isAdmin ? "/admin/" : null,
+           tabBarIcon: ({ color }) => (
+             <IconSymbol size={28} name="lock.shield.fill" color={color} />
+           ),
+         }}
+       />
+
+       {/* Otras pantallas de supervisor siempre ocultas de la barra inferior */}
       <Tabs.Screen
         name="supervisor/pending-corrections"
         options={{
@@ -100,11 +113,18 @@ export default function ProtectedLayout() {
       />
       
       <Tabs.Screen
-        name="supervisor/create-product"
-        options={{
-          href: null,
-        }}
-      />
+         name="supervisor/create-product"
+         options={{
+           href: null,
+         }}
+       />
+
+       <Tabs.Screen
+         name="admin/invite-supervisor"
+         options={{
+           href: null,
+         }}
+       />
       <Tabs.Screen
         name="product-detail"
         options={{
