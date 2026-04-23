@@ -10,7 +10,7 @@ export default function WelcomeScreen() {
     <ThemedView style={styles.container}>
       <ThemedView style={styles.content}>
         <Image
-          source={require("../../assets/images/icon.png")}
+          source={require("../../assets/images/logo.png")}
           style={styles.logo}
           resizeMode="contain"
         />
