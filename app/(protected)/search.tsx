@@ -29,7 +29,7 @@ export default function SearchScreen() {
       let response;
       try {
         response = await productsService.searchProducts({ barcode: query });
-      } catch (err) {
+      } catch {
         // Si falla la búsqueda por código, continuamos para intentar por nombre
         response = null;
       }
@@ -119,7 +119,7 @@ export default function SearchScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <View style={styles.header}>
         <ThemedText type="title" style={styles.title}>
           Explorar
@@ -215,7 +215,7 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 12,
     paddingHorizontal: 20,
   },
   header: {

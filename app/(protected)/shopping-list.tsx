@@ -100,7 +100,7 @@ export default function ShoppingListScreen() {
   const totalGeneral = items.reduce((sum, item) => sum + item.selectedPrice.precio * item.quantity, 0);
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <View style={styles.header}>
         <ThemedText type="title">Mi Lista</ThemedText>
         {items.length > 0 && (
@@ -149,7 +149,7 @@ export default function ShoppingListScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 12,
   },
   header: {
     flexDirection: "row",

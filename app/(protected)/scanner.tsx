@@ -12,12 +12,12 @@ export default function ScannerScreen() {
   const [scanned, setScanned] = useState(false);
 
   if (!permission) {
-    return <ThemedView />;
+    return <ThemedView safeArea />;
   }
 
   if (!permission.granted) {
     return (
-      <ThemedView style={styles.container}>
+      <ThemedView safeArea style={styles.container}>
         <ThemedText style={styles.message}>
           Necesitamos tu permiso para usar la cámara
         </ThemedText>
@@ -69,7 +69,7 @@ export default function ScannerScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ThemedView safeArea safeAreaEdges={["top", "left", "right", "bottom"]} style={styles.container}>
       <CameraView
         style={styles.camera}
         onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -91,7 +91,7 @@ export default function ScannerScreen() {
           </View>
         </View>
       </CameraView>
-    </View>
+    </ThemedView>
   );
 }
 

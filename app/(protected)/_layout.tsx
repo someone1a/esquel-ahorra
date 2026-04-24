@@ -78,7 +78,7 @@ export default function ProtectedLayout() {
          name="supervisor/index"
          options={{
            title: "Panel",
-           href: isSupervisor ? "/supervisor/" : null,
+           href: isSupervisor ? "/supervisor" : null,
            tabBarIcon: ({ color }) => (
              <IconSymbol size={28} name="shield.fill" color={color} />
            ),
@@ -90,7 +90,7 @@ export default function ProtectedLayout() {
          name="admin/index"
          options={{
            title: "Admin",
-           href: isAdmin ? "/admin/" : null,
+           href: isAdmin ? "/admin" : null,
            tabBarIcon: ({ color }) => (
              <IconSymbol size={28} name="lock.shield.fill" color={color} />
            ),

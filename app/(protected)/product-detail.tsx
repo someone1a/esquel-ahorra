@@ -73,7 +73,7 @@ export default function ProductDetailScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <IconSymbol name="chevron.left" size={24} color="#2563EB" />
@@ -189,7 +189,7 @@ export default function ProductDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 12,
     paddingHorizontal: 20,
   },
   header: {

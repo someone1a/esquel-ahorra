@@ -42,7 +42,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <ThemedText style={styles.title}>Iniciar Sesión</ThemedText>
 
       <TextInput

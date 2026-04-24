@@ -40,7 +40,7 @@ export default function SupervisorDashboard() {
   ];
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <View style={styles.header}>
         <ThemedText type="title">Panel de Supervisor</ThemedText>
         <ThemedText style={styles.subtitle}>
@@ -77,7 +77,7 @@ export default function SupervisorDashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 12,
   },
   header: {
     paddingHorizontal: 20,

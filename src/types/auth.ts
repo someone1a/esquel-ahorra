@@ -27,6 +27,7 @@ export interface RegisterRequest {
   password: string;
   confirm_password: string;
   rol: string;
+  referral_code?: string;
 }
 
 export interface ActivateRequest {

@@ -7,7 +7,7 @@ import { ThemedView } from "@/components/themed-view";
 
 export default function WelcomeScreen() {
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <ThemedView style={styles.content}>
         <Image
           source={require("../../assets/images/logo.png")}

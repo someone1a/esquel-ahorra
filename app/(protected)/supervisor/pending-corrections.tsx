@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { router, Redirect } from "expo-router";
+import { Redirect, router } from "expo-router";
 import React from "react";
 import {
   ActivityIndicator,
@@ -14,20 +14,18 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { productsService } from "@/services/products";
-import { PriceCorrection } from "@/types/products";
 import { useAuth } from "@/store/auth-context";
+import { PriceCorrection } from "@/types/products";
 
 export default function PendingCorrectionsScreen() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-
-  if (user?.rol?.toLowerCase() !== "supervisor") {
-    return <Redirect href="/" />;
-  }
+  const isSupervisor = user?.rol?.toLowerCase() === "supervisor";
 
   const { data: corrections, isLoading, refetch } = useQuery({
     queryKey: ["pending-corrections"],
     queryFn: productsService.getPendingCorrections,
+    enabled: isSupervisor,
   });
 
   const approveMutation = useMutation({
@@ -40,6 +38,10 @@ export default function PendingCorrectionsScreen() {
       Alert.alert("Error", error.message || "No se pudo aprobar la corrección");
     },
   });
+
+  if (!isSupervisor) {
+    return <Redirect href="/" />;
+  }
 
   const handleApprove = (id: number) => {
     Alert.alert(
@@ -86,7 +88,7 @@ export default function PendingCorrectionsScreen() {
   );
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <IconSymbol name="chevron.left" size={24} color="#111827" />
@@ -120,7 +122,7 @@ export default function PendingCorrectionsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 12,
   },
   header: {
     flexDirection: "row",

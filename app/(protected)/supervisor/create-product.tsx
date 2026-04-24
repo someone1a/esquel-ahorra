@@ -27,6 +27,7 @@ export default function CreateProductScreen() {
   const [codigoBarra, setCodigoBarra] = useState("");
   const [precio, setPrecio] = useState("");
   const [localId, setLocalId] = useState<number | null>(null);
+  const isSupervisor = user?.rol?.toLowerCase() === "supervisor";
   
   // Camera state
   const [permission, requestPermission] = useCameraPermissions();
@@ -35,13 +36,10 @@ export default function CreateProductScreen() {
 
   const queryClient = useQueryClient();
 
-  if (user?.rol?.toLowerCase() !== "supervisor") {
-    return <Redirect href="/" />;
-  }
-
   const { data: locals, isLoading: isLoadingLocals } = useQuery({
     queryKey: ["locals"],
     queryFn: () => productsService.getLocals(),
+    enabled: isSupervisor,
   });
 
   const createMutation = useMutation({
@@ -55,6 +53,10 @@ export default function CreateProductScreen() {
       Alert.alert("Error", error.message || "No se pudo crear el producto");
     },
   });
+
+  if (!isSupervisor) {
+    return <Redirect href="/" />;
+  }
 
   const handleBarCodeScanned = ({ data }: { data: string }) => {
     setCodigoBarra(data);
@@ -90,7 +92,7 @@ export default function CreateProductScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <IconSymbol name="chevron.left" size={24} color="#111827" />
@@ -208,7 +210,7 @@ export default function CreateProductScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 12,
   },
   header: {
     flexDirection: "row",

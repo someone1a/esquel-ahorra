@@ -58,7 +58,7 @@ export default function InviteSupervisorScreen() {
       style={{ flex: 1 }}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <ThemedView style={styles.container}>
+        <ThemedView safeArea style={styles.container}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
               <MaterialIcons name="arrow-back" size={24} color="#374151" />
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    paddingTop: 60,
+    paddingTop: 24,
   },
   header: {
     flexDirection: "row",

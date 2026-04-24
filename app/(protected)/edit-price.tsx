@@ -89,7 +89,7 @@ export default function EditPriceScreen() {
 
   if (productError || (!product && productId)) {
     return (
-      <ThemedView style={styles.center}>
+      <ThemedView safeArea style={styles.center}>
         <ThemedText style={styles.errorText}>Error al cargar el producto</ThemedText>
         <TouchableOpacity onPress={() => router.back()}>
           <ThemedText style={styles.link}>Volver</ThemedText>
@@ -100,7 +100,7 @@ export default function EditPriceScreen() {
 
   if (!product && barcode) {
     return (
-      <ThemedView style={styles.container}>
+      <ThemedView safeArea style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <IconSymbol name="chevron.left" size={24} color="#2563EB" />
@@ -119,14 +119,14 @@ export default function EditPriceScreen() {
 
   if (!product) {
     return (
-      <ThemedView style={styles.center}>
+      <ThemedView safeArea style={styles.center}>
         <ThemedText>Selecciona un producto para editar su precio.</ThemedText>
       </ThemedView>
     );
   }
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
@@ -218,7 +218,7 @@ export default function EditPriceScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 12,
     paddingHorizontal: 20,
   },
   header: {

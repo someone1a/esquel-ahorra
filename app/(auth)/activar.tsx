@@ -4,16 +4,16 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -72,7 +72,7 @@ export default function ActivationScreen() {
 
   if (!token) {
     return (
-      <ThemedView style={styles.centerContainer}>
+      <ThemedView safeArea style={styles.centerContainer}>
         <MaterialIcons name="error-outline" size={64} color="#EF4444" />
         <ThemedText type="subtitle" style={styles.errorTitle}>
           Enlace inválido
@@ -89,7 +89,7 @@ export default function ActivationScreen() {
 
   if (isValidating) {
     return (
-      <ThemedView style={styles.centerContainer}>
+      <ThemedView safeArea style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2563EB" />
         <ThemedText style={styles.loadingText}>Validando invitación...</ThemedText>
       </ThemedView>
@@ -98,7 +98,7 @@ export default function ActivationScreen() {
 
   if (validationError || (validation && !validation.valid)) {
     return (
-      <ThemedView style={styles.centerContainer}>
+      <ThemedView safeArea style={styles.centerContainer}>
         <MaterialIcons name="error-outline" size={64} color="#EF4444" />
         <ThemedText type="subtitle" style={styles.errorTitle}>
           {validation?.message || "Este enlace no es válido"}
@@ -115,7 +115,7 @@ export default function ActivationScreen() {
 
   if (isSuccess) {
     return (
-      <ThemedView style={styles.centerContainer}>
+      <ThemedView safeArea style={styles.centerContainer}>
         <MaterialIcons name="check-circle-outline" size={64} color="#10B981" />
         <ThemedText type="subtitle" style={styles.successTitle}>
           ¡Cuenta activada!
@@ -136,7 +136,7 @@ export default function ActivationScreen() {
       style={{ flex: 1 }}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <ThemedView style={styles.container}>
+        <ThemedView safeArea style={styles.container}>
           <View style={styles.header}>
             <MaterialIcons name="verified-user" size={48} color="#2563EB" />
             <ThemedText style={styles.title}>Activá tu cuenta</ThemedText>

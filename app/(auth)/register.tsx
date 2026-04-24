@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   StyleSheet,
@@ -16,12 +16,39 @@ import { useAuth } from "@/store/auth-context";
 import { RegisterRequest } from "@/types/auth";
 
 export default function RegisterScreen() {
+  const params = useLocalSearchParams<{
+    ref?: string | string[];
+    rol?: string | string[];
+  }>();
+
+  const normalizeStringParam = (
+    value: string | string[] | undefined
+  ): string | undefined => {
+    const raw = Array.isArray(value) ? value[0] : value;
+    const trimmed = raw?.trim();
+    if (!trimmed) return undefined;
+    return trimmed;
+  };
+
+  const ref: string | undefined = normalizeStringParam(params.ref);
+  const rawRolFromQuery = normalizeStringParam(params.rol)?.toLowerCase();
+  const rolFromQuery: string | undefined =
+    rawRolFromQuery && (rawRolFromQuery === "comprador" || rawRolFromQuery === "supervisor")
+      ? rawRolFromQuery
+      : undefined;
+
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
+  const [referralCode, setReferralCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [selectedRol] = useState("comprador");
   const { login } = useAuth();
+
+  useEffect(() => {
+    if (ref) setReferralCode(ref);
+  }, [ref]);
 
   const registerMutation = useMutation({
     mutationFn: authService.register,
@@ -35,6 +62,9 @@ export default function RegisterScreen() {
   });
 
   const handleRegister = () => {
+    const effectiveRol = rolFromQuery ?? selectedRol;
+    const normalizedReferralCode = referralCode.trim();
+
     if (!name || !lastname || !email || !password || !confirmPassword) {
       Alert.alert("Error", "Por favor completa todos los campos");
       return;
@@ -45,20 +75,35 @@ export default function RegisterScreen() {
       return;
     }
 
+    if (effectiveRol === "supervisor" && !normalizedReferralCode) {
+      Alert.alert(
+        "Error",
+        "Para registrarte como supervisor necesitás un código de invitación."
+      );
+      return;
+    }
+
     const data: RegisterRequest = {
       name,
       lastname,
       email,
       password,
       confirm_password: confirmPassword,
-      rol: "comprador",
+      rol: effectiveRol,
+      ...(normalizedReferralCode
+        ? { referral_code: normalizedReferralCode }
+        : {}),
     };
     registerMutation.mutate(data);
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <ThemedText style={styles.title}>Registrarse</ThemedText>
+
+      {rolFromQuery ? (
+        <ThemedText style={styles.fixedInfo}>Rol: {rolFromQuery}</ThemedText>
+      ) : null}
 
       <TextInput
         style={styles.input}
@@ -84,6 +129,21 @@ export default function RegisterScreen() {
         keyboardType="email-address"
         autoCapitalize="none"
       />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Código de invitación"
+        value={referralCode}
+        onChangeText={setReferralCode}
+        autoCapitalize="characters"
+        editable={!ref}
+      />
+
+      {ref ? (
+        <ThemedText style={styles.helperText}>
+          Este código viene desde el link de invitación.
+        </ThemedText>
+      ) : null}
 
       <TextInput
         style={styles.input}
@@ -159,6 +219,16 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  fixedInfo: {
+    textAlign: "center",
+    color: "#111827",
+    marginBottom: 16,
+  },
+  helperText: {
+    color: "#6B7280",
+    marginTop: -10,
+    marginBottom: 16,
   },
   link: {
     textAlign: "center",

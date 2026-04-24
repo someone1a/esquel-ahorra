@@ -6,7 +6,7 @@ import { ThemedView } from '@/components/themed-view';
 
 export default function ModalScreen() {
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <ThemedText type="title">Este es un modal</ThemedText>
       <Link href="/" dismissTo style={styles.link}>
         <ThemedText type="link">Ir a la pantalla de inicio</ThemedText>

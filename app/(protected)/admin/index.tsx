@@ -33,7 +33,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <View style={styles.header}>
         <ThemedText type="title">Panel de Administrador</ThemedText>
         <ThemedText style={styles.subtitle}>
@@ -70,7 +70,7 @@ export default function AdminDashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 12,
   },
   header: {
     paddingHorizontal: 20,

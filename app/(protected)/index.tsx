@@ -42,7 +42,7 @@ export default function HomeScreen() {
       let response;
       try {
         response = await productsService.searchProducts({ barcode: barcodeSearch });
-      } catch (err) {
+      } catch {
         // Si falla la búsqueda por código, continuamos para intentar por nombre
         response = null;
       }
@@ -80,7 +80,7 @@ export default function HomeScreen() {
 
   if (isLoading) {
     return (
-      <ThemedView style={styles.center}>
+      <ThemedView safeArea style={styles.center}>
         <ActivityIndicator size="large" color="#2563EB" />
         <ThemedText style={styles.loadingText}>Cargando información...</ThemedText>
       </ThemedView>
@@ -88,7 +88,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <View style={styles.header}>
         <ThemedText type="title" style={styles.title}>
           Esquel AHORRA
@@ -189,7 +189,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 12,
     backgroundColor: "#F9FAFB",
   },
   header: {

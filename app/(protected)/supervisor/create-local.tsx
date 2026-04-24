@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { router, Redirect } from "expo-router";
+import { Redirect, router } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
@@ -15,8 +15,8 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { productsService } from "@/services/products";
-import { LocalCreate } from "@/types/products";
 import { useAuth } from "@/store/auth-context";
+import { LocalCreate } from "@/types/products";
 
 export default function CreateLocalScreen() {
   const { user } = useAuth();
@@ -25,10 +25,7 @@ export default function CreateLocalScreen() {
   const [telefono, setTelefono] = useState("");
   
   const queryClient = useQueryClient();
-
-  if (user?.rol?.toLowerCase() !== "supervisor") {
-    return <Redirect href="/" />;
-  }
+  const isSupervisor = user?.rol?.toLowerCase() === "supervisor";
 
   const createMutation = useMutation({
     mutationFn: (data: LocalCreate) => productsService.createLocal(data),
@@ -41,6 +38,10 @@ export default function CreateLocalScreen() {
       Alert.alert("Error", error.message || "No se pudo crear el local");
     },
   });
+
+  if (!isSupervisor) {
+    return <Redirect href="/" />;
+  }
 
   const handleCreate = () => {
     if (!nombre || !direccion) {
@@ -58,7 +59,7 @@ export default function CreateLocalScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <IconSymbol name="chevron.left" size={24} color="#111827" />
@@ -115,7 +116,7 @@ export default function CreateLocalScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 12,
   },
   header: {
     flexDirection: "row",

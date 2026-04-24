@@ -1,7 +1,7 @@
 import { authService } from "@/services/auth";
 import { Token, User } from "@/types/auth";
 import { storage } from "@/utils/storage";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { Platform } from "react-native";
 
 interface AuthContextType {
@@ -24,11 +24,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadStoredAuth();
+  const logout = useCallback(async () => {
+    setToken(null);
+    setUser(null);
+
+    if (Platform.OS === "web") {
+      await storage.clear();
+      window.location.replace("/welcome");
+    } else {
+      await storage.removeItem(TOKEN_KEY);
+      await storage.removeItem(REFRESH_TOKEN_KEY);
+      await storage.removeItem(USER_KEY);
+    }
   }, []);
 
-  const loadStoredAuth = async () => {
+  const loadStoredAuth = useCallback(async () => {
     try {
       const storedToken = await storage.getItem(TOKEN_KEY);
       const storedUser = await storage.getItem(USER_KEY);
@@ -55,7 +65,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [logout]);
+
+  useEffect(() => {
+    loadStoredAuth();
+  }, [loadStoredAuth]);
 
   const refreshUser = async () => {
     try {
@@ -80,21 +94,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await storage.setItem(USER_KEY, JSON.stringify(userData));
     } catch (error) {
       console.error("Error fetching user profile after login:", error);
-    }
-  };
-
-  const logout = async () => {
-    setToken(null);
-    setUser(null);
-
-    if (Platform.OS === "web") {
-      await storage.clear();
-      // En web, hacemos un redireccionamiento completo para limpiar TODO el estado (React Query, etc)
-      window.location.replace("/welcome");
-    } else {
-      await storage.removeItem(TOKEN_KEY);
-      await storage.removeItem(REFRESH_TOKEN_KEY);
-      await storage.removeItem(USER_KEY);
     }
   };
 

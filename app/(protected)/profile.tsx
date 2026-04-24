@@ -10,6 +10,17 @@ export default function ProfileScreen() {
   const { user, logout } = useAuth();
 
   const handleLogout = async () => {
+    if (Platform.OS === "web") {
+      const confirmed =
+        typeof globalThis.confirm === "function"
+          ? globalThis.confirm("¿Estás seguro de que quieres cerrar sesión?")
+          : true;
+      if (!confirmed) return;
+      await logout();
+      router.replace("/welcome");
+      return;
+    }
+
     Alert.alert("Cerrar Sesión", "¿Estás seguro de que quieres cerrar sesión?", [
       { text: "Cancelar", style: "cancel" },
       {
@@ -27,14 +38,14 @@ export default function ProfileScreen() {
 
   if (!user) {
     return (
-      <ThemedView style={styles.container}>
+      <ThemedView safeArea style={styles.container}>
         <ThemedText>Cargando...</ThemedText>
       </ThemedView>
     );
   }
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView safeArea style={styles.container}>
       <ThemedText style={styles.title}>Perfil</ThemedText>
 
       <View style={styles.infoContainer}>

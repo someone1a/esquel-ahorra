@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Slot } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AuthProvider } from "@/store/auth-context";
@@ -30,14 +31,16 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ShoppingListProvider>
-          <>
-            <ThemeProvider
-              value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-            >
-              <Slot />
-            </ThemeProvider>
-            <StatusBar style="auto" />
-          </>
+          <SafeAreaProvider>
+            <>
+              <ThemeProvider
+                value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+              >
+                <Slot />
+              </ThemeProvider>
+              <StatusBar style="auto" />
+            </>
+          </SafeAreaProvider>
         </ShoppingListProvider>
       </AuthProvider>
     </QueryClientProvider>
