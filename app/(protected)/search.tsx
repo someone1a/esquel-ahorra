@@ -2,13 +2,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    FlatList,
-    Keyboard,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  Keyboard,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -190,12 +190,14 @@ export default function SearchScreen() {
                 <TouchableOpacity 
                   style={styles.localCard}
                   onPress={() => {
-                    // Navegar a productos del local
-                    alert(`Local: ${item.nombre}\nPróximamente verás sus productos.`);
+                    router.push({
+                      pathname: "/store",
+                      params: { localId: item.id },
+                    });
                   }}
                 >
                   <View>
-                    <ThemedText type="defaultSemiBold">{item.nombre}</ThemedText>
+                    <ThemedText type="defaultSemiBold" style={styles.localName}>{item.nombre}</ThemedText>
                     <ThemedText style={styles.localAddress}>{item.direccion}</ThemedText>
                   </View>
                   <IconSymbol name="chevron.right" size={20} color="#9CA3AF" />
@@ -315,12 +317,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    color: "#000000",
     backgroundColor: "#FFFFFF",
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: "#E5E7EB",
+  },
+  localName: {
+    fontSize: 16,
+    color: "#111827",
   },
   localAddress: {
     fontSize: 14,

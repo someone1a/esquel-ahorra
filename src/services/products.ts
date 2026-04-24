@@ -1,4 +1,13 @@
-import { Local, LocalCreate, PriceCorrection, Product, ProductCreate, ProductSearchResponse, ProductUpdate } from "@/types/products";
+import {
+  Local,
+  LocalCreate,
+  LocalWithProducts,
+  PriceCorrection,
+  Product,
+  ProductCreate,
+  ProductSearchResponse,
+  ProductUpdate,
+} from "@/types/products";
 import { api } from "./api";
 
 export const productsService = {
@@ -37,6 +46,10 @@ export const productsService = {
 
   async getLocal(localId: number): Promise<Local> {
     return api.get(`/locals/${localId}`);
+  },
+
+  async getLocalWithProducts(localId: number): Promise<LocalWithProducts> {
+    return api.get(`/locals/${localId}/productos`);
   },
 
   async createLocal(local: LocalCreate): Promise<Local> {

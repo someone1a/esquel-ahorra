@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "#D1D5DB",
+    color: "#000000",
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,

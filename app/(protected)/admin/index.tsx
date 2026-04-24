@@ -1,6 +1,6 @@
-import { router, Redirect } from "expo-router";
+import { Redirect, router } from "expo-router";
 import React from "react";
-import { StyleSheet, TouchableOpacity, View, ScrollView } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#FFFFFF",
+    color: "#000000",
     padding: 16,
     borderRadius: 12,
     marginBottom: 16,
@@ -111,6 +112,7 @@ const styles = StyleSheet.create({
   menuTitle: {
     fontSize: 16,
     marginBottom: 2,
+    color: "#111827",
   },
   menuDescription: {
     fontSize: 13,

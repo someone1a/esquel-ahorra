@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 24,
-    color: "#111827",
+    color: "#ffffff",
     marginBottom: 4,
   },
   productBarcode: {
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#111827",
+    color: "#ffffff",
   },
   sectionSubtitle: {
     fontSize: 13,

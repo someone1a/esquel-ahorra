@@ -132,6 +132,12 @@ export default function ProtectedLayout() {
         }}
       />
       <Tabs.Screen
+        name="store"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
         name="edit-price"
         options={{
           href: null, // Ocultar de la barra de pestañas

@@ -2,11 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-    Alert,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "#D1D5DB",
+    color: "#000000",
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,

@@ -39,6 +39,17 @@ export interface Local {
   is_active: boolean | null;
 }
 
+export interface LocalProduct {
+  id: number;
+  nombre: string;
+  precio: number;
+  codigo_barra?: string;
+}
+
+export interface LocalWithProducts extends Local {
+  productos: LocalProduct[];
+}
+
 export interface LocalCreate {
   nombre: string;
   direccion: string;

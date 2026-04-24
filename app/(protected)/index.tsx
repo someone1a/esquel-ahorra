@@ -2,14 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-    ActivityIndicator,
-    FlatList,
-    Keyboard,
-    RefreshControl,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  Keyboard,
+  RefreshControl,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -125,9 +125,9 @@ export default function HomeScreen() {
             disabled={isSearching}
           >
             {isSearching ? (
-              <ActivityIndicator color="#FFFFFF" size="small" />
+              <ActivityIndicator color="#000000" size="small" />
             ) : (
-              <IconSymbol name="magnifyingglass" color="#FFFFFF" size={22} />
+              <IconSymbol name="magnifyingglass" color="#000000" size={22} />
             )}
           </TouchableOpacity>
         </View>
@@ -157,7 +157,12 @@ export default function HomeScreen() {
           renderItem={({ item }) => (
             <TouchableOpacity 
               style={styles.localCard}
-              onPress={() => alert(`Local: ${item.nombre}\nPróximamente verás sus productos.`)}
+              onPress={() =>
+                router.push({
+                  pathname: "/store",
+                  params: { localId: item.id },
+                })
+              }
             >
               <View style={styles.localInfo}>
                 <ThemedText type="defaultSemiBold" style={styles.localName}>
@@ -244,6 +249,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: "#E5E7EB",
+    color: "#000000",
     borderRadius: 10,
     padding: 12,
     backgroundColor: "#F9FAFB",
@@ -286,6 +292,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#000000",
   },
   seeAllLink: {
     color: "#2563EB",
