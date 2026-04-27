@@ -18,6 +18,10 @@ export const authService = {
     return api.post(`/auth/refresh?refresh_token=${refreshToken}`);
   },
 
+  async logout(): Promise<void> {
+    await api.post("/auth/logout", undefined);
+  },
+
   async validateActivationToken(token: string): Promise<ValidateTokenResponse> {
     return api.get(`/auth/activate/validate?token=${token}`);
   },
@@ -27,6 +31,6 @@ export const authService = {
    },
  
    async inviteSupervisor(email: string): Promise<void> {
-     return api.post("/auth/invite", { email, rol: "supervisor" });
+     return api.post("/auth/invite", { email });
    },
  };

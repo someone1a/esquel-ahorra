@@ -5,11 +5,22 @@ export interface Price {
   precio: number;
 }
 
+export interface Barcode {
+  id: number;
+  product_id: number;
+  codigo_barra: string;
+}
+
 export interface Product {
   id: number;
   nombre: string;
-  codigo_barra: string;
+  barcodes: Barcode[] | null;
   prices: Price[] | null;
+}
+
+export function getPrimaryBarcode(product: Product): string | null {
+  const code = product.barcodes?.[0]?.codigo_barra;
+  return code && code.trim() ? code : null;
 }
 
 export interface ProductCreate {
@@ -43,7 +54,6 @@ export interface LocalProduct {
   id: number;
   nombre: string;
   precio: number;
-  codigo_barra?: string;
 }
 
 export interface LocalWithProducts extends Local {

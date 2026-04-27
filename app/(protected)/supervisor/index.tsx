@@ -10,8 +10,10 @@ import { useAuth } from "@/store/auth-context";
 export default function SupervisorDashboard() {
   const { user } = useAuth();
   
-  // Safety check for role
-  if (user?.rol?.toLowerCase() !== "supervisor") {
+  const role = user?.rol?.toLowerCase();
+  const canUseSupervisor = role === "supervisor" || role === "admin";
+
+  if (!canUseSupervisor) {
     return <Redirect href="/" />;
   }
 

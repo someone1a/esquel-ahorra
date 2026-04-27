@@ -15,7 +15,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { productsService } from "@/services/products";
-import { Product } from "@/types/products";
+import { getPrimaryBarcode, Product } from "@/types/products";
 
 export default function SearchScreen() {
   const { q } = useLocalSearchParams<{ q?: string }>();
@@ -98,7 +98,7 @@ export default function SearchScreen() {
             {item.nombre}
           </ThemedText>
           <ThemedText style={styles.productBarcode}>
-            Código: {item.codigo_barra}
+            Código: {getPrimaryBarcode(item) ?? "Sin código"}
           </ThemedText>
         </View>
         <View style={styles.priceInfo}>

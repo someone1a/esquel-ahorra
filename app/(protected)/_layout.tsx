@@ -25,8 +25,9 @@ export default function ProtectedLayout() {
     return null; // Redirect will happen
   }
 
-  const isSupervisor = user?.rol?.toLowerCase() === "supervisor";
-   const isAdmin = user?.rol?.toLowerCase() === "admin";
+  const role = user?.rol?.toLowerCase();
+  const isAdmin = role === "admin";
+  const canUseSupervisor = role === "supervisor" || isAdmin;
  
    return (
      <Tabs
@@ -78,7 +79,7 @@ export default function ProtectedLayout() {
          name="supervisor/index"
          options={{
            title: "Panel",
-           href: isSupervisor ? "/supervisor" : null,
+           href: canUseSupervisor ? "/supervisor" : null,
            tabBarIcon: ({ color }) => (
              <IconSymbol size={28} name="shield.fill" color={color} />
            ),

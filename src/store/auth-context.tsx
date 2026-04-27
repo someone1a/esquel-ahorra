@@ -25,6 +25,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const logout = useCallback(async () => {
+    try {
+      await authService.logout();
+    } catch {}
+
     setToken(null);
     setUser(null);
 

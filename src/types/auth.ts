@@ -6,6 +6,7 @@ export interface User {
   rol: string;
   points: number;
   corrections_count: number;
+  referral_code?: string | null;
 }
 
 export interface Token {
@@ -27,7 +28,7 @@ export interface RegisterRequest {
   password: string;
   confirm_password: string;
   rol: string;
-  referral_code?: string;
+  referral_code?: string | null;
 }
 
 export interface ActivateRequest {

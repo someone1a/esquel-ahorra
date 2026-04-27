@@ -20,12 +20,13 @@ import { PriceCorrection } from "@/types/products";
 export default function PendingCorrectionsScreen() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const isSupervisor = user?.rol?.toLowerCase() === "supervisor";
+  const role = user?.rol?.toLowerCase();
+  const canUseSupervisor = role === "supervisor" || role === "admin";
 
   const { data: corrections, isLoading, refetch } = useQuery({
     queryKey: ["pending-corrections"],
     queryFn: productsService.getPendingCorrections,
-    enabled: isSupervisor,
+    enabled: canUseSupervisor,
   });
 
   const approveMutation = useMutation({
@@ -39,7 +40,7 @@ export default function PendingCorrectionsScreen() {
     },
   });
 
-  if (!isSupervisor) {
+  if (!canUseSupervisor) {
     return <Redirect href="/" />;
   }
 

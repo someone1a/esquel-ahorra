@@ -11,17 +11,17 @@ import {
 import { api } from "./api";
 
 export const productsService = {
-  async getProducts(skip = 0, limit = 100): Promise<Product[]> {
-    return api.get(`/products?skip=${skip}&limit=${limit}`);
-  },
-
   async getProduct(productId: number): Promise<Product> {
     return api.get(`/products/${productId}`);
   },
 
-  async getProductByBarcode(barcode: string, fallbackName?: string): Promise<Product> {
-    const query = fallbackName ? `?fallback_name=${encodeURIComponent(fallbackName)}` : "";
-    return api.get(`/products/barcode/${barcode}${query}`);
+  async getProductByBarcode(barcode: string): Promise<Product | null> {
+    try {
+      return await api.get(`/products/barcode/${encodeURIComponent(barcode)}`);
+    } catch (error: any) {
+      if (error?.status === 404) return null;
+      throw error;
+    }
   },
 
   async searchProducts(params: { barcode?: string; name?: string }): Promise<ProductSearchResponse> {

@@ -27,7 +27,8 @@ export default function CreateProductScreen() {
   const [codigoBarra, setCodigoBarra] = useState("");
   const [precio, setPrecio] = useState("");
   const [localId, setLocalId] = useState<number | null>(null);
-  const isSupervisor = user?.rol?.toLowerCase() === "supervisor";
+  const role = user?.rol?.toLowerCase();
+  const canUseSupervisor = role === "supervisor" || role === "admin";
   
   // Camera state
   const [permission, requestPermission] = useCameraPermissions();
@@ -39,7 +40,7 @@ export default function CreateProductScreen() {
   const { data: locals, isLoading: isLoadingLocals } = useQuery({
     queryKey: ["locals"],
     queryFn: () => productsService.getLocals(),
-    enabled: isSupervisor,
+    enabled: canUseSupervisor,
   });
 
   const createMutation = useMutation({
@@ -54,7 +55,7 @@ export default function CreateProductScreen() {
     },
   });
 
-  if (!isSupervisor) {
+  if (!canUseSupervisor) {
     return <Redirect href="/" />;
   }
 

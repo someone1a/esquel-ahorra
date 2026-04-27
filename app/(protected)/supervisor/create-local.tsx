@@ -25,7 +25,8 @@ export default function CreateLocalScreen() {
   const [telefono, setTelefono] = useState("");
   
   const queryClient = useQueryClient();
-  const isSupervisor = user?.rol?.toLowerCase() === "supervisor";
+  const role = user?.rol?.toLowerCase();
+  const canUseSupervisor = role === "supervisor" || role === "admin";
 
   const createMutation = useMutation({
     mutationFn: (data: LocalCreate) => productsService.createLocal(data),
@@ -39,7 +40,7 @@ export default function CreateLocalScreen() {
     },
   });
 
-  if (!isSupervisor) {
+  if (!canUseSupervisor) {
     return <Redirect href="/" />;
   }
 

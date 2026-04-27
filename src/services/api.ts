@@ -36,7 +36,10 @@ export const api = {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || "API request failed");
+      const error = new Error(errorData.detail || errorData.message || "API request failed") as any;
+      error.status = response.status;
+      error.data = errorData;
+      throw error;
     }
 
     // Return null if response is empty (e.g., 204 No Content)

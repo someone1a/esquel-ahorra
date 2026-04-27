@@ -49,7 +49,7 @@ export default function StoreScreen() {
         if (!q) return true;
         return (
           normalize(p.nombre).includes(q) ||
-          (p.codigo_barra ? normalize(p.codigo_barra).includes(q) : false)
+          p.id.toString().includes(q)
         );
       })
       .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
@@ -72,7 +72,7 @@ export default function StoreScreen() {
             {item.nombre}
           </ThemedText>
           <ThemedText style={styles.productBarcode}>
-            {item.codigo_barra ? `Código: ${item.codigo_barra}` : `ID: ${item.id}`}
+            ID: {item.id}
           </ThemedText>
         </View>
 
@@ -135,7 +135,7 @@ export default function StoreScreen() {
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Buscar por nombre o código..."
+          placeholder="Buscar por nombre o ID..."
           value={query}
           onChangeText={setQuery}
           returnKeyType="search"

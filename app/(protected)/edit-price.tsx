@@ -15,6 +15,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { productsService } from "@/services/products";
+import { getPrimaryBarcode } from "@/types/products";
 
 export default function EditPriceScreen() {
   const { productId, barcode } = useLocalSearchParams<{ productId?: string; barcode?: string }>();
@@ -140,7 +141,7 @@ export default function EditPriceScreen() {
             {product.nombre}
           </ThemedText>
           <ThemedText style={styles.productBarcode}>
-            Código: {product.codigo_barra}
+            Código: {getPrimaryBarcode(product) ?? "Sin código"}
           </ThemedText>
           
           <ThemedText style={styles.pricesTitle}>Precios actuales:</ThemedText>

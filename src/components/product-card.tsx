@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "./themed-text";
-import { Product } from "@/types/products";
+import { getPrimaryBarcode, Product } from "@/types/products";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 interface ProductCardProps {
@@ -30,7 +30,7 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
           {product.nombre}
         </ThemedText>
         <ThemedText style={styles.barcode}>
-          Código: {product.codigo_barra}
+          Código: {getPrimaryBarcode(product) ?? "Sin código"}
         </ThemedText>
         <View style={styles.priceContainer}>
           <ThemedText style={styles.priceLabel}>
