@@ -2,20 +2,21 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    ScrollView,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { BrandHeader } from "@/components/ui/brand-header";
 import { productsService } from "@/services/products";
 import { getPrimaryBarcode } from "@/types/products";
+import { Brand } from "@/utils/constants/brand";
 
 export default function EditPriceScreen() {
   const { productId, barcode } = useLocalSearchParams<{ productId?: string; barcode?: string }>();
@@ -83,7 +84,7 @@ export default function EditPriceScreen() {
   if (isLoading) {
     return (
       <ThemedView style={styles.center}>
-        <ActivityIndicator size="large" color="#2563EB" />
+        <ActivityIndicator size="large" color={Brand.colors.primary} />
       </ThemedView>
     );
   }
@@ -102,18 +103,15 @@ export default function EditPriceScreen() {
   if (!product && barcode) {
     return (
       <ThemedView safeArea style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <IconSymbol name="chevron.left" size={24} color="#2563EB" />
-          </TouchableOpacity>
-          <ThemedText type="title">Nuevo Producto</ThemedText>
-        </View>
-        <ThemedText style={styles.description}>
+        <BrandHeader title="Nuevo producto" subtitle="Todavía no está registrado" onBack={() => router.back()} />
+        <View style={styles.content}>
+          <ThemedText style={styles.description}>
           El producto con código {barcode} no está registrado.
-        </ThemedText>
-        <ThemedText style={styles.info}>
+          </ThemedText>
+          <ThemedText style={styles.info}>
           Funcionalidad de registro de nuevos productos próximamente.
-        </ThemedText>
+          </ThemedText>
+        </View>
       </ThemedView>
     );
   }
@@ -128,13 +126,8 @@ export default function EditPriceScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <IconSymbol name="chevron.left" size={24} color="#2563EB" />
-          </TouchableOpacity>
-          <ThemedText type="title">¿Este precio es incorrecto?</ThemedText>
-        </View>
+      <BrandHeader title="¿Este precio es incorrecto?" subtitle="Ayudanos a mantener los precios actualizados" onBack={() => router.back()} />
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
 
         <View style={styles.productInfo}>
           <ThemedText type="subtitle" style={styles.productName}>
@@ -210,7 +203,7 @@ export default function EditPriceScreen() {
             </ThemedText>
           </TouchableOpacity>
         </View>
-        <View style={{ height: 40 }} />
+        <View style={{ height: 24 }} />
       </ScrollView>
     </ThemedView>
   );
@@ -219,38 +212,33 @@ export default function EditPriceScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 12,
-    paddingHorizontal: 20,
+    backgroundColor: Brand.colors.background,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 20,
-  },
-  backButton: {
-    padding: 5,
+  content: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 24,
   },
   productInfo: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     padding: 20,
     borderRadius: 12,
     marginBottom: 25,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: Brand.colors.border,
   },
   productName: {
-    color: "#111827",
+    color: Brand.colors.text,
     marginBottom: 5,
   },
   productBarcode: {
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginBottom: 15,
   },
   pricesTitle: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#374151",
+    color: Brand.colors.text,
     marginBottom: 8,
     textTransform: "uppercase",
   },
@@ -261,12 +249,12 @@ const styles = StyleSheet.create({
   },
   localName: {
     fontSize: 14,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
   priceValue: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#059669",
+    color: Brand.colors.primary,
   },
   noPrices: {
     fontSize: 14,
@@ -291,16 +279,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
-    backgroundColor: "#F9FAFB",
+    borderColor: Brand.colors.border,
+    backgroundColor: Brand.colors.background,
   },
   localOptionSelected: {
-    backgroundColor: "#2563EB",
-    borderColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
+    borderColor: Brand.colors.primary,
   },
   localOptionText: {
     fontSize: 14,
-    color: "#4B5563",
+    color: Brand.colors.muted,
   },
   localOptionTextSelected: {
     color: "#FFFFFF",
@@ -308,14 +296,14 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: Brand.colors.border,
     borderRadius: 8,
     padding: 15,
     fontSize: 20,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
   },
   updateButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
     padding: 16,
     borderRadius: 8,
     alignItems: "center",
@@ -336,21 +324,21 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   errorText: {
-    color: "#EF4444",
+    color: Brand.colors.danger,
     marginBottom: 10,
   },
   link: {
-    color: "#2563EB",
+    color: Brand.colors.primary,
     textDecorationLine: "underline",
   },
   description: {
     fontSize: 16,
-    color: "#374151",
+    color: Brand.colors.text,
     marginBottom: 10,
   },
   info: {
     fontSize: 14,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     fontStyle: "italic",
   },
 });

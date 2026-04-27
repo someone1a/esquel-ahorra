@@ -6,16 +6,18 @@ import {
   FlatList,
   Keyboard,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { BrandHeader } from "@/components/ui/brand-header";
+import { BrandSearchBar } from "@/components/ui/brand-search-bar";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { productsService } from "@/services/products";
 import { getPrimaryBarcode, Product } from "@/types/products";
+import { Brand } from "@/utils/constants/brand";
 
 export default function SearchScreen() {
   const { q } = useLocalSearchParams<{ q?: string }>();
@@ -120,32 +122,26 @@ export default function SearchScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
-      <View style={styles.header}>
-        <ThemedText type="title" style={styles.title}>
-          Explorar
-        </ThemedText>
-      </View>
-
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Nombre o código de barras..."
+      <BrandHeader
+        title="Buscar"
+        subtitle="Encontrá el mejor precio en Esquel"
+        right={
+          <TouchableOpacity
+            style={styles.headerIconButton}
+            onPress={() => router.push("/scanner")}
+            activeOpacity={0.85}
+          >
+            <IconSymbol name="qrcode" size={22} color={Brand.colors.white} />
+          </TouchableOpacity>
+        }
+      >
+        <BrandSearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
-          onSubmitEditing={() => handleSearch()}
+          placeholder="Nombre o código de barras..."
+          onSubmit={() => handleSearch()}
         />
-        <TouchableOpacity 
-          style={[styles.searchButton, searchMutation.isPending && styles.buttonDisabled]} 
-          onPress={() => handleSearch()}
-          disabled={searchMutation.isPending}
-        >
-          {searchMutation.isPending ? (
-            <ActivityIndicator color="#FFFFFF" size="small" />
-          ) : (
-            <IconSymbol name="magnifyingglass" color="#FFFFFF" size={24} />
-          )}
-        </TouchableOpacity>
-      </View>
+      </BrandHeader>
 
       {hasSearched ? (
         <View style={styles.resultsSection}>
@@ -179,7 +175,7 @@ export default function SearchScreen() {
           </ThemedText>
 
           {isLoadingLocals ? (
-            <ActivityIndicator size="small" color="#2563EB" />
+            <ActivityIndicator size="small" color={Brand.colors.primary} />
           ) : errorLocals ? (
             <ThemedText style={styles.errorText}>Error al cargar locales</ThemedText>
           ) : (
@@ -217,39 +213,16 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 12,
     paddingHorizontal: 20,
+    backgroundColor: Brand.colors.background,
   },
-  header: {
-    marginBottom: 20,
-  },
-  title: {
-    color: "#2563EB",
-  },
-  searchContainer: {
-    flexDirection: "row",
-    gap: 10,
-    marginBottom: 30,
-  },
-  searchInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#D1D5DB",
-    borderRadius: 8,
-    padding: 12,
-    backgroundColor: "#FFFFFF",
-    fontSize: 16,
-  },
-  searchButton: {
-    backgroundColor: "#2563EB",
-    padding: 12,
-    borderRadius: 8,
-    justifyContent: "center",
+  headerIconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: "center",
-    width: 50,
-  },
-  buttonDisabled: {
-    backgroundColor: "#9CA3AF",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.18)",
   },
   resultsSection: {
     flex: 1,
@@ -261,7 +234,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   clearLink: {
-    color: "#2563EB",
+    color: Brand.colors.primary,
     fontSize: 14,
   },
   localsSection: {
@@ -270,15 +243,16 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: 15,
     fontSize: 20,
+    color: "#000000",
   },
   productCard: {
     flexDirection: "row",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: Brand.colors.border,
     alignItems: "center",
   },
   productInfo: {
@@ -286,11 +260,11 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 16,
-    color: "#111827",
+    color: Brand.colors.text,
   },
   productBarcode: {
     fontSize: 13,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginTop: 2,
   },
   priceInfo: {
@@ -300,13 +274,13 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 10,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     textTransform: "uppercase",
   },
   priceValue: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#059669",
+    color: Brand.colors.primary,
   },
   noPrice: {
     fontSize: 14,
@@ -318,29 +292,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     color: "#000000",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: Brand.colors.border,
   },
   localName: {
     fontSize: 16,
-    color: "#111827",
+    color: Brand.colors.text,
   },
   localAddress: {
     fontSize: 14,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginTop: 4,
   },
   errorText: {
-    color: "#EF4444",
+    color: Brand.colors.danger,
   },
   emptyText: {
     textAlign: "center",
     marginTop: 30,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
   listContent: {
     paddingBottom: 20,

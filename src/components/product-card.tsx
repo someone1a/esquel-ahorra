@@ -1,8 +1,9 @@
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { getPrimaryBarcode, Product } from "@/types/products";
+import { Brand } from "@/utils/constants/brand";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "./themed-text";
-import { getPrimaryBarcode, Product } from "@/types/products";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 
 interface ProductCardProps {
   product: Product;
@@ -20,7 +21,7 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
     <TouchableOpacity
       style={[
         styles.container,
-        { backgroundColor: colorScheme === "light" ? "#FFFFFF" : "#1F2937" },
+        { backgroundColor: colorScheme === "light" ? Brand.colors.card : "#1F2937" },
       ]}
       onPress={() => onPress?.(product)}
       activeOpacity={0.7}
@@ -61,11 +62,11 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    color: "#2563EB",
+    color: Brand.colors.primary,
   },
   barcode: {
     fontSize: 14,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
   priceContainer: {
     flexDirection: "row",
@@ -73,14 +74,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 8,
     borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
+    borderTopColor: Brand.colors.border,
     paddingTop: 8,
   },
   priceLabel: {
     fontSize: 14,
-    color: "#374151",
+    color: Brand.colors.text,
   },
   priceValue: {
-    color: "#059669",
+    color: Brand.colors.primary,
   },
 });

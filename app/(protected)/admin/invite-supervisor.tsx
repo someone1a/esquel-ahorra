@@ -18,6 +18,8 @@ import {
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { BrandHeader } from "@/components/ui/brand-header";
+import { Brand } from "@/utils/constants/brand";
 
 export default function InviteSupervisorScreen() {
   const [email, setEmail] = useState("");
@@ -59,16 +61,11 @@ export default function InviteSupervisorScreen() {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <ThemedView safeArea style={styles.container}>
-          <View style={styles.header}>
-            <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-              <MaterialIcons name="arrow-back" size={24} color="#374151" />
-            </TouchableOpacity>
-            <ThemedText type="title" style={styles.title}>Invitar Supervisor</ThemedText>
-          </View>
+          <BrandHeader title="Invitar supervisor" subtitle="Enviá una invitación por email" onBack={() => router.back()} />
 
           <View style={styles.content}>
             <View style={styles.iconContainer}>
-              <MaterialIcons name="person-add" size={64} color="#2563EB" />
+              <MaterialIcons name="person-add" size={64} color={Brand.colors.primary} />
             </View>
             
             <ThemedText style={styles.description}>
@@ -116,33 +113,26 @@ export default function InviteSupervisorScreen() {
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: Brand.colors.background,
   },
   container: {
     flex: 1,
-    padding: 24,
-    paddingTop: 24,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 40,
-  },
-  backButton: {
-    marginRight: 16,
-    padding: 4,
+    backgroundColor: Brand.colors.background,
   },
   title: {
     fontSize: 24,
   },
   content: {
     alignItems: "center",
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 24,
   },
   iconContainer: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: "#EFF6FF",
+    backgroundColor: `${Brand.colors.primary}20`,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 24,
@@ -150,14 +140,14 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     textAlign: "center",
-    color: "#374151",
+    color: Brand.colors.text,
     marginBottom: 12,
     lineHeight: 24,
   },
   info: {
     fontSize: 14,
     textAlign: "center",
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginBottom: 32,
     lineHeight: 20,
   },
@@ -168,26 +158,26 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#374151",
+    color: Brand.colors.text,
     marginBottom: 8,
   },
   input: {
     width: "100%",
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: Brand.colors.border,
     borderRadius: 12,
     padding: 14,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     fontSize: 16,
-    color: "#111827",
+    color: Brand.colors.text,
   },
   button: {
     width: "100%",
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
-    shadowColor: "#2563EB",
+    shadowColor: Brand.colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 4,

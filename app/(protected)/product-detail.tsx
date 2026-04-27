@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -11,10 +11,15 @@ import {
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { BrandHeader } from "@/components/ui/brand-header";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { productsService } from "@/services/products";
 import { useShoppingList } from "@/store/shopping-list-context";
 import { getPrimaryBarcode, Price } from "@/types/products";
+import { Brand } from "@/utils/constants/brand";
+import { storage } from "@/utils/storage";
+
+const FEATURED_PRODUCT_KEY = "home.featuredProductId";
 
 export default function ProductDetailScreen() {
   const { productId } = useLocalSearchParams<{ productId: string }>();
@@ -30,6 +35,12 @@ export default function ProductDetailScreen() {
     enabled: !!productId,
   });
 
+  useEffect(() => {
+    const id = product ? String(product.id) : null;
+    if (!id) return;
+    storage.setItem(FEATURED_PRODUCT_KEY, id);
+  }, [product]);
+
   const {
     data: locals,
     isLoading: isLoadingLocals,
@@ -43,7 +54,7 @@ export default function ProductDetailScreen() {
   if (isLoading) {
     return (
       <ThemedView style={styles.center}>
-        <ActivityIndicator size="large" color="#2563EB" />
+        <ActivityIndicator size="large" color={Brand.colors.primary} />
       </ThemedView>
     );
   }
@@ -74,14 +85,13 @@ export default function ProductDetailScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <IconSymbol name="chevron.left" size={24} color="#2563EB" />
-        </TouchableOpacity>
-        <ThemedText type="title">Detalle del Producto</ThemedText>
-      </View>
+      <BrandHeader
+        title="Compará precios"
+        subtitle="Mismo producto, diferentes precios"
+        onBack={() => router.back()}
+      />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
         <View style={styles.productMainInfo}>
           <ThemedText type="subtitle" style={styles.productName}>
             {product.nombre}
@@ -92,7 +102,7 @@ export default function ProductDetailScreen() {
         </View>
 
         <View style={styles.pricesSection}>
-          <ThemedText style={styles.sectionTitle}>Comparativa de Precios</ThemedText>
+          <ThemedText style={styles.sectionTitle}>Comparativa de precios</ThemedText>
           <ThemedText style={styles.sectionSubtitle}>Ordenado de menor a mayor</ThemedText>
 
           {sortedPrices.length > 0 ? (
@@ -156,7 +166,7 @@ export default function ProductDetailScreen() {
                         })
                       }
                     >
-                      <IconSymbol name="pencil" size={18} color="#2563EB" />
+                      <IconSymbol name="pencil" size={18} color={Brand.colors.primary} />
                       <ThemedText style={styles.editButtonText}>Corregir</ThemedText>
                     </TouchableOpacity>
                   </View>
@@ -180,7 +190,7 @@ export default function ProductDetailScreen() {
             </View>
           )}
         </View>
-        <View style={{ height: 40 }} />
+        <View style={{ height: 24 }} />
       </ScrollView>
     </ThemedView>
   );
@@ -189,29 +199,24 @@ export default function ProductDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 12,
-    paddingHorizontal: 20,
+    backgroundColor: Brand.colors.background,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 20,
-  },
-  backButton: {
-    padding: 5,
+  content: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 24,
   },
   productMainInfo: {
     marginBottom: 25,
   },
   productName: {
     fontSize: 24,
-    color: "#ffffff",
+    color: Brand.colors.text,
     marginBottom: 4,
   },
   productBarcode: {
     fontSize: 14,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
   pricesSection: {
     flex: 1,
@@ -219,20 +224,20 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: Brand.colors.white,
   },
   sectionSubtitle: {
     fontSize: 13,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginBottom: 15,
   },
   priceCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: Brand.colors.border,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -240,9 +245,9 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   bestPriceCard: {
-    borderColor: "#10B981",
+    borderColor: Brand.colors.primary,
     borderWidth: 2,
-    backgroundColor: "#F0FDF4",
+    backgroundColor: `${Brand.colors.primary}14`,
   },
   priceCardHeader: {
     flexDirection: "row",
@@ -254,11 +259,11 @@ const styles = StyleSheet.create({
   },
   localName: {
     fontSize: 16,
-    color: "#111827",
+    color: Brand.colors.text,
   },
   localAddress: {
     fontSize: 12,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
   priceInfo: {
     alignItems: "flex-end",
@@ -266,10 +271,10 @@ const styles = StyleSheet.create({
   priceValue: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#059669",
+    color: Brand.colors.primary,
   },
   bestPriceBadge: {
-    backgroundColor: "#10B981",
+    backgroundColor: Brand.colors.primary,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -294,10 +299,10 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   addButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
   },
   removeButton: {
-    backgroundColor: "#EF4444",
+    backgroundColor: Brand.colors.danger,
   },
   actionButtonText: {
     color: "#FFFFFF",
@@ -312,11 +317,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#2563EB",
+    borderColor: Brand.colors.primary,
     gap: 6,
   },
   editButtonText: {
-    color: "#2563EB",
+    color: Brand.colors.primary,
     fontSize: 14,
     fontWeight: "600",
   },
@@ -327,29 +332,29 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   errorText: {
-    color: "#EF4444",
+    color: Brand.colors.danger,
     marginBottom: 10,
   },
   link: {
-    color: "#2563EB",
+    color: Brand.colors.primary,
     textDecorationLine: "underline",
   },
   emptyState: {
     alignItems: "center",
     padding: 30,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: Brand.colors.background,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: Brand.colors.border,
     borderStyle: "dashed",
   },
   emptyText: {
-    color: "#6B7280",
+    color: Brand.colors.muted,
     textAlign: "center",
     marginBottom: 15,
   },
   firstPriceButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,

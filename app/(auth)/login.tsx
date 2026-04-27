@@ -2,11 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity
+    Alert,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -14,6 +14,7 @@ import { ThemedView } from "@/components/themed-view";
 import { authService } from "@/services/auth";
 import { useAuth } from "@/store/auth-context";
 import { LoginRequest } from "@/types/auth";
+import { Brand } from "@/utils/constants/brand";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -89,26 +90,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: Brand.colors.background,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 30,
-    color: "#2563EB",
+    color: Brand.colors.primary,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: Brand.colors.border,
     color: "#000000",
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
   },
   button: {
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
   link: {
     textAlign: "center",
-    color: "#2563EB",
+    color: Brand.colors.primary,
     textDecorationLine: "underline",
   },
 });

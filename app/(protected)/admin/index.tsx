@@ -4,8 +4,10 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { BrandHeader } from "@/components/ui/brand-header";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useAuth } from "@/store/auth-context";
+import { Brand } from "@/utils/constants/brand";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -21,25 +23,20 @@ export default function AdminDashboard() {
       description: "Enviar invitación por email a un nuevo supervisor",
       icon: "person.badge.plus",
       route: "/admin/invite-supervisor",
-      color: "#2563EB",
+      color: Brand.colors.primary,
     },
     {
       title: "Gestionar Usuarios",
       description: "Ver y editar roles de usuarios",
       icon: "person.fill",
       route: "/admin/manage-users", // Placeholder for future feature
-      color: "#10B981",
+      color: Brand.colors.primary,
     },
   ];
 
   return (
     <ThemedView safeArea style={styles.container}>
-      <View style={styles.header}>
-        <ThemedText type="title">Panel de Administrador</ThemedText>
-        <ThemedText style={styles.subtitle}>
-          Control total de Esquel Ahorra
-        </ThemedText>
-      </View>
+      <BrandHeader title="Panel de administrador" subtitle="Control total de Esquel Ahorra" />
 
       <ScrollView style={styles.menuContainer}>
         {menuItems.map((item, index) => (
@@ -70,28 +67,26 @@ export default function AdminDashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 12,
-  },
-  header: {
-    paddingHorizontal: 20,
-    marginBottom: 30,
+    backgroundColor: Brand.colors.background,
   },
   subtitle: {
     fontSize: 16,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginTop: 4,
   },
   menuContainer: {
     paddingHorizontal: 20,
+    paddingTop: 16,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    color: "#000000",
+    backgroundColor: Brand.colors.card,
     padding: 16,
     borderRadius: 12,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: Brand.colors.border,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -112,10 +107,10 @@ const styles = StyleSheet.create({
   menuTitle: {
     fontSize: 16,
     marginBottom: 2,
-    color: "#111827",
+    color: Brand.colors.text,
   },
   menuDescription: {
     fontSize: 13,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
 });

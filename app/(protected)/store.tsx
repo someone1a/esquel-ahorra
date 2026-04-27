@@ -2,21 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useMemo, useState } from "react";
 import {
-    ActivityIndicator,
-    FlatList,
-    Keyboard,
-    RefreshControl,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  Keyboard,
+  RefreshControl,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { BrandHeader } from "@/components/ui/brand-header";
+import { BrandSearchBar } from "@/components/ui/brand-search-bar";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { productsService } from "@/services/products";
 import { LocalProduct } from "@/types/products";
+import { Brand } from "@/utils/constants/brand";
 
 function normalize(s: string) {
   return s.trim().toLowerCase();
@@ -99,7 +101,7 @@ export default function StoreScreen() {
   if (isLoading) {
     return (
       <ThemedView safeArea style={styles.center}>
-        <ActivityIndicator size="large" color="#2563EB" />
+        <ActivityIndicator size="large" color={Brand.colors.primary} />
         <ThemedText style={styles.loadingText}>Cargando productos...</ThemedText>
       </ThemedView>
     );
@@ -118,38 +120,18 @@ export default function StoreScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <IconSymbol name="chevron.left" size={24} color="#2563EB" />
-        </TouchableOpacity>
-        <View style={styles.headerText}>
-          <ThemedText type="title" style={styles.title}>
-            {localWithProducts?.nombre ?? `Local #${localIdNumber}`}
-          </ThemedText>
-          <ThemedText style={styles.subtitle}>
-            {localWithProducts?.direccion ?? "Esquel"} • {productsForLocal.length} productos
-          </ThemedText>
-        </View>
-      </View>
-
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Buscar por nombre o ID..."
+      <BrandHeader
+        title={localWithProducts?.nombre ?? `Local #${localIdNumber}`}
+        subtitle={`${localWithProducts?.direccion ?? "Esquel"} • ${productsForLocal.length} productos`}
+        onBack={() => router.back()}
+      >
+        <BrandSearchBar
           value={query}
           onChangeText={setQuery}
-          returnKeyType="search"
-          onSubmitEditing={() => Keyboard.dismiss()}
+          placeholder="Buscar por nombre o ID..."
+          onSubmit={() => Keyboard.dismiss()}
         />
-        <TouchableOpacity
-          style={styles.searchButton}
-          onPress={() => {
-            Keyboard.dismiss();
-          }}
-        >
-          <IconSymbol name="magnifyingglass" color="#FFFFFF" size={22} />
-        </TouchableOpacity>
-      </View>
+      </BrandHeader>
 
       <FlatList
         data={productsForLocal}
@@ -171,74 +153,23 @@ export default function StoreScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 12,
     paddingHorizontal: 20,
-    backgroundColor: "#F9FAFB",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 16,
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#FFFFFF",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#F3F4F6",
-  },
-  headerText: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 22,
-    color: "#111827",
-  },
-  subtitle: {
-    color: "#6B7280",
-    marginTop: 2,
-  },
-  searchContainer: {
-    flexDirection: "row",
-    gap: 10,
-    marginBottom: 16,
-  },
-  searchInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    color: "#000000",
-    borderRadius: 10,
-    padding: 12,
-    backgroundColor: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  searchButton: {
-    backgroundColor: "#2563EB",
-    padding: 12,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    width: 50,
+    backgroundColor: Brand.colors.background,
   },
   listContent: {
     paddingBottom: 24,
+    paddingTop: 12,
   },
   productCard: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#F3F4F6",
+    borderColor: Brand.colors.border,
   },
   productInfo: {
     flex: 1,
@@ -246,11 +177,11 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 16,
-    color: "#111827",
+    color: Brand.colors.text,
   },
   productBarcode: {
     fontSize: 13,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginTop: 2,
   },
   priceInfo: {
@@ -259,11 +190,11 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 12,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
   priceValue: {
     fontSize: 16,
-    color: "#059669",
+    color: Brand.colors.primary,
     fontWeight: "700",
   },
   noPrice: {
@@ -274,26 +205,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F9FAFB",
+    backgroundColor: Brand.colors.background,
     paddingHorizontal: 20,
   },
   loadingText: {
     marginTop: 12,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     textAlign: "center",
   },
   errorText: {
-    color: "#DC2626",
+    color: Brand.colors.danger,
     textAlign: "center",
     marginBottom: 10,
   },
   link: {
-    color: "#2563EB",
+    color: Brand.colors.primary,
     fontWeight: "700",
   },
   emptyText: {
     textAlign: "center",
     marginTop: 20,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
 });

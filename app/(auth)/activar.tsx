@@ -4,20 +4,21 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { Brand } from "@/utils/constants/brand";
 
 export default function ActivationScreen() {
   const { token } = useLocalSearchParams<{ token: string }>();
@@ -73,7 +74,7 @@ export default function ActivationScreen() {
   if (!token) {
     return (
       <ThemedView safeArea style={styles.centerContainer}>
-        <MaterialIcons name="error-outline" size={64} color="#EF4444" />
+        <MaterialIcons name="error-outline" size={64} color={Brand.colors.danger} />
         <ThemedText type="subtitle" style={styles.errorTitle}>
           Enlace inválido
         </ThemedText>
@@ -90,7 +91,7 @@ export default function ActivationScreen() {
   if (isValidating) {
     return (
       <ThemedView safeArea style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#2563EB" />
+        <ActivityIndicator size="large" color={Brand.colors.primary} />
         <ThemedText style={styles.loadingText}>Validando invitación...</ThemedText>
       </ThemedView>
     );
@@ -99,7 +100,7 @@ export default function ActivationScreen() {
   if (validationError || (validation && !validation.valid)) {
     return (
       <ThemedView safeArea style={styles.centerContainer}>
-        <MaterialIcons name="error-outline" size={64} color="#EF4444" />
+        <MaterialIcons name="error-outline" size={64} color={Brand.colors.danger} />
         <ThemedText type="subtitle" style={styles.errorTitle}>
           {validation?.message || "Este enlace no es válido"}
         </ThemedText>
@@ -116,7 +117,7 @@ export default function ActivationScreen() {
   if (isSuccess) {
     return (
       <ThemedView safeArea style={styles.centerContainer}>
-        <MaterialIcons name="check-circle-outline" size={64} color="#10B981" />
+        <MaterialIcons name="check-circle-outline" size={64} color={Brand.colors.primary} />
         <ThemedText type="subtitle" style={styles.successTitle}>
           ¡Cuenta activada!
         </ThemedText>
@@ -138,7 +139,7 @@ export default function ActivationScreen() {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <ThemedView safeArea style={styles.container}>
           <View style={styles.header}>
-            <MaterialIcons name="verified-user" size={48} color="#2563EB" />
+            <MaterialIcons name="verified-user" size={48} color={Brand.colors.primary} />
             <ThemedText style={styles.title}>Activá tu cuenta</ThemedText>
             <ThemedText style={styles.subtitle}>
               Fuiste invitada/o a formar parte de Esquel Ahorra como supervisora/or.
@@ -174,7 +175,7 @@ export default function ActivationScreen() {
                   <MaterialIcons
                     name={showPassword ? "visibility" : "visibility-off"}
                     size={24}
-                    color="#6B7280"
+                    color={Brand.colors.muted}
                   />
                 </TouchableOpacity>
               </View>
@@ -197,7 +198,7 @@ export default function ActivationScreen() {
                   <MaterialIcons
                     name={showConfirmPassword ? "visibility" : "visibility-off"}
                     size={24}
-                    color="#6B7280"
+                    color={Brand.colors.muted}
                   />
                 </TouchableOpacity>
               </View>
@@ -240,11 +241,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: Brand.colors.background,
   },
   scrollContainer: {
     flexGrow: 1,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: Brand.colors.background,
   },
   container: {
     flex: 1,
@@ -260,18 +261,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 16,
     marginBottom: 8,
-    color: "#111827",
+    color: Brand.colors.text,
     textAlign: "center",
   },
   subtitle: {
     fontSize: 16,
-    color: "#4B5563",
+    color: Brand.colors.muted,
     textAlign: "center",
     marginBottom: 12,
   },
   instruction: {
     fontSize: 14,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     textAlign: "center",
     fontWeight: "500",
   },
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#374151",
+    color: Brand.colors.text,
     marginBottom: 8,
   },
   passwordWrapper: {
@@ -295,13 +296,13 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: Brand.colors.border,
     borderRadius: 12,
     padding: 14,
     paddingRight: 50,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     fontSize: 16,
-    color: "#111827",
+    color: Brand.colors.text,
   },
   eyeIcon: {
     position: "absolute",
@@ -309,12 +310,12 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   button: {
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
     marginTop: 12,
-    shadowColor: "#2563EB",
+    shadowColor: Brand.colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -333,39 +334,39 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
   errorTitle: {
     marginTop: 16,
     marginBottom: 8,
-    color: "#EF4444",
+    color: Brand.colors.danger,
   },
   errorText: {
     textAlign: "center",
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginBottom: 24,
     fontSize: 15,
   },
   successTitle: {
     marginTop: 16,
     marginBottom: 8,
-    color: "#10B981",
+    color: Brand.colors.primary,
   },
   successText: {
     textAlign: "center",
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginBottom: 24,
     fontSize: 15,
   },
   errorHint: {
-    color: "#EF4444",
+    color: Brand.colors.danger,
     fontSize: 12,
     marginTop: -12,
     marginBottom: 16,
     marginLeft: 4,
   },
   emailBadge: {
-    backgroundColor: "#EFF6FF",
+    backgroundColor: `${Brand.colors.primary}20`,
     padding: 12,
     borderRadius: 8,
     width: "100%",
@@ -374,19 +375,19 @@ const styles = StyleSheet.create({
   },
   emailLabel: {
     fontSize: 12,
-    color: "#3B82F6",
+    color: Brand.colors.primary,
     fontWeight: "600",
     textTransform: "uppercase",
     marginBottom: 2,
   },
   emailValue: {
     fontSize: 16,
-    color: "#1E40AF",
+    color: Brand.colors.text,
     fontWeight: "bold",
   },
   expiresInfo: {
     fontSize: 12,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginTop: 20,
     textAlign: "center",
   },

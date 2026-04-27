@@ -4,7 +4,9 @@ import { Alert, Platform, StyleSheet, Text, TouchableOpacity, View } from "react
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { BrandHeader } from "@/components/ui/brand-header";
 import { useAuth } from "@/store/auth-context";
+import { Brand } from "@/utils/constants/brand";
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
@@ -46,7 +48,7 @@ export default function ProfileScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
-      <ThemedText style={styles.title}>Perfil</ThemedText>
+      <BrandHeader title="Perfil" subtitle="Tu cuenta en Esquel Ahorra" />
 
       <View style={styles.infoContainer}>
         <ThemedText style={styles.label}>Nombre:</ThemedText>
@@ -72,38 +74,35 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#F9FAFB",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 30,
-    color: "#2563EB",
+    backgroundColor: Brand.colors.background,
   },
   infoContainer: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     padding: 20,
-    borderRadius: 8,
-    marginBottom: 30,
+    borderRadius: 12,
+    marginHorizontal: 16,
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: Brand.colors.border,
   },
   label: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#111827",
+    color: Brand.colors.text,
     marginBottom: 4,
   },
   value: {
     fontSize: 16,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginBottom: 16,
   },
   logoutButton: {
-    backgroundColor: "#EF4444",
+    backgroundColor: Brand.colors.danger,
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
+    marginHorizontal: 16,
+    marginTop: 16,
   },
   logoutText: {
     color: "#FFFFFF",

@@ -2,21 +2,22 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Redirect, router } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { BrandHeader } from "@/components/ui/brand-header";
 import { productsService } from "@/services/products";
 import { useAuth } from "@/store/auth-context";
 import { LocalCreate } from "@/types/products";
+import { Brand } from "@/utils/constants/brand";
 
 export default function CreateLocalScreen() {
   const { user } = useAuth();
@@ -61,14 +62,9 @@ export default function CreateLocalScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <IconSymbol name="chevron.left" size={24} color="#111827" />
-        </TouchableOpacity>
-        <ThemedText type="subtitle">Nuevo Supermercado</ThemedText>
-      </View>
+      <BrandHeader title="Nuevo supermercado" subtitle="Agregá un local para comparar precios" onBack={() => router.back()} />
 
-      <ScrollView contentContainerStyle={styles.form}>
+      <ScrollView contentContainerStyle={styles.form} showsVerticalScrollIndicator={false}>
         <View style={styles.inputGroup}>
           <ThemedText style={styles.label}>Nombre del Local *</ThemedText>
           <TextInput
@@ -117,19 +113,12 @@ export default function CreateLocalScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 12,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    marginBottom: 20,
-  },
-  backButton: {
-    marginRight: 16,
+    backgroundColor: Brand.colors.background,
   },
   form: {
-    padding: 20,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 24,
   },
   inputGroup: {
     marginBottom: 20,
@@ -138,19 +127,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     marginBottom: 8,
-    color: "#374151",
+    color: Brand.colors.text,
   },
   input: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: Brand.colors.border,
     fontSize: 16,
+    color: Brand.colors.text,
   },
   button: {
-    backgroundColor: "#10B981",
+    backgroundColor: Brand.colors.primary,
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: "center",

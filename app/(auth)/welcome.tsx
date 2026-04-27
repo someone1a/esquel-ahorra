@@ -4,6 +4,7 @@ import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { Brand } from "@/utils/constants/brand";
 
 export default function WelcomeScreen() {
   return (
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     justifyContent: "space-between",
-    backgroundColor: "#F9FAFB",
+    backgroundColor: Brand.colors.background,
   },
   content: {
     flex: 1,
@@ -67,20 +68,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "#2563EB",
+    color: Brand.colors.primary,
     marginBottom: 8,
     textAlign: "center",
   },
   subtitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#1F2937",
+    color: Brand.colors.text,
     marginBottom: 12,
     textAlign: "center",
   },
   description: {
     fontSize: 16,
-    color: "#4B5563",
+    color: Brand.colors.muted,
     textAlign: "center",
     lineHeight: 24,
     paddingHorizontal: 20,
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   loginButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
@@ -111,10 +112,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "#2563EB",
+    borderColor: Brand.colors.primary,
   },
   registerButtonText: {
-    color: "#2563EB",
+    color: Brand.colors.primary,
     fontSize: 18,
     fontWeight: "bold",
   },

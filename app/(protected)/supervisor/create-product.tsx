@@ -16,10 +16,12 @@ import {
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { BrandHeader } from "@/components/ui/brand-header";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { productsService } from "@/services/products";
 import { useAuth } from "@/store/auth-context";
 import { ProductCreate } from "@/types/products";
+import { Brand } from "@/utils/constants/brand";
 
 export default function CreateProductScreen() {
   const { user } = useAuth();
@@ -94,12 +96,7 @@ export default function CreateProductScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <IconSymbol name="chevron.left" size={24} color="#111827" />
-        </TouchableOpacity>
-        <ThemedText type="subtitle">Nuevo Producto</ThemedText>
-      </View>
+      <BrandHeader title="Nuevo producto" subtitle="Cargá un producto nuevo al sistema" onBack={() => router.back()} />
 
       <ScrollView contentContainerStyle={styles.form}>
         <View style={styles.inputGroup}>
@@ -142,7 +139,7 @@ export default function CreateProductScreen() {
         <View style={styles.inputGroup}>
           <ThemedText style={styles.label}>Supermercado *</ThemedText>
           {isLoadingLocals ? (
-            <ActivityIndicator size="small" color="#2563EB" />
+            <ActivityIndicator size="small" color={Brand.colors.primary} />
           ) : (
             <View style={styles.localsGrid}>
               {locals?.map((local) => (
@@ -211,19 +208,12 @@ export default function CreateProductScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 12,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    marginBottom: 20,
-  },
-  backButton: {
-    marginRight: 16,
+    backgroundColor: Brand.colors.background,
   },
   form: {
-    padding: 20,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 24,
   },
   inputGroup: {
     marginBottom: 20,
@@ -232,16 +222,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     marginBottom: 8,
-    color: "#374151",
+    color: Brand.colors.text,
   },
   input: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: Brand.colors.border,
     fontSize: 16,
+    color: Brand.colors.text,
   },
   barcodeInputContainer: {
     flexDirection: "row",
@@ -252,7 +243,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scanButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
     width: 48,
     height: 48,
     borderRadius: 8,
@@ -265,27 +256,27 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   localOption: {
-    backgroundColor: "#F3F4F6",
+    backgroundColor: Brand.colors.background,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: Brand.colors.border,
   },
   localOptionSelected: {
-    backgroundColor: "#2563EB",
-    borderColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
+    borderColor: Brand.colors.primary,
   },
   localOptionText: {
     fontSize: 12,
-    color: "#4B5563",
+    color: Brand.colors.muted,
   },
   localOptionTextSelected: {
     color: "#FFFFFF",
     fontWeight: "bold",
   },
   button: {
-    backgroundColor: "#F59E0B",
+    backgroundColor: Brand.colors.primary,
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: "center",

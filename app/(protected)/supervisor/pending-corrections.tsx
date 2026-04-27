@@ -12,10 +12,12 @@ import {
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { BrandHeader } from "@/components/ui/brand-header";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { productsService } from "@/services/products";
 import { useAuth } from "@/store/auth-context";
 import { PriceCorrection } from "@/types/products";
+import { Brand } from "@/utils/constants/brand";
 
 export default function PendingCorrectionsScreen() {
   const { user } = useAuth();
@@ -90,16 +92,11 @@ export default function PendingCorrectionsScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <IconSymbol name="chevron.left" size={24} color="#111827" />
-        </TouchableOpacity>
-        <ThemedText type="subtitle">Correcciones Pendientes</ThemedText>
-      </View>
+      <BrandHeader title="Correcciones pendientes" subtitle="Revisá y aprobá cambios de precios" onBack={() => router.back()} />
 
       {isLoading ? (
         <View style={styles.center}>
-          <ActivityIndicator size="large" color="#2563EB" />
+          <ActivityIndicator size="large" color={Brand.colors.primary} />
         </View>
       ) : (
         <FlatList
@@ -109,7 +106,7 @@ export default function PendingCorrectionsScreen() {
           contentContainerStyle={styles.list}
           ListEmptyComponent={
             <View style={styles.center}>
-              <ThemedText>No hay correcciones pendientes</ThemedText>
+              <ThemedText style={{ color: Brand.colors.muted }}>No hay correcciones pendientes</ThemedText>
             </View>
           }
           refreshing={isLoading}
@@ -123,25 +120,19 @@ export default function PendingCorrectionsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 12,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    marginBottom: 20,
-  },
-  backButton: {
-    marginRight: 16,
+    backgroundColor: Brand.colors.background,
   },
   list: {
     padding: 16,
+    paddingTop: 16,
   },
   card: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: Brand.colors.border,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -155,13 +146,13 @@ const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: 12,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
   pricesRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#F3F4F6",
+    backgroundColor: Brand.colors.background,
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
@@ -172,21 +163,21 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 11,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     marginBottom: 4,
   },
   oldPrice: {
     fontSize: 18,
-    color: "#EF4444",
+    color: Brand.colors.danger,
     textDecorationLine: "line-through",
   },
   newPrice: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#10B981",
+    color: Brand.colors.primary,
   },
   approveButton: {
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: "center",
@@ -199,6 +190,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    color:"#000000",
     paddingTop: 50,
   },
 });

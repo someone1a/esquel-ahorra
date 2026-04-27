@@ -6,6 +6,7 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { productsService } from "@/services/products";
+import { Brand } from "@/utils/constants/brand";
 
 export default function ScannerScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -99,6 +100,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    backgroundColor: Brand.colors.background,
   },
   message: {
     textAlign: "center",
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
     padding: 12,
     borderRadius: 8,
     alignSelf: "center",

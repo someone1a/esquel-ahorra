@@ -1,17 +1,19 @@
+import { router } from "expo-router";
 import React from "react";
 import {
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Alert,
+    Alert,
+    FlatList,
+    StyleSheet,
+    TouchableOpacity,
+    View,
 } from "react-native";
-import { router } from "expo-router";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { BrandHeader } from "@/components/ui/brand-header";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useShoppingList } from "@/store/shopping-list-context";
+import { Brand } from "@/utils/constants/brand";
 
 export default function ShoppingListScreen() {
   const { items, removeItem, updateQuantity, clearList } = useShoppingList();
@@ -72,7 +74,7 @@ export default function ShoppingListScreen() {
                 onPress={() => updateQuantity(shoppingItem.product.id, group.localId, shoppingItem.quantity - 1)}
                 style={styles.quantityBtn}
               >
-                <IconSymbol name="minus.circle" size={24} color="#2563EB" />
+                <IconSymbol name="minus.circle" size={24} color={Brand.colors.primary} />
               </TouchableOpacity>
               
               <ThemedText style={styles.quantityText}>{shoppingItem.quantity}</ThemedText>
@@ -81,14 +83,14 @@ export default function ShoppingListScreen() {
                 onPress={() => updateQuantity(shoppingItem.product.id, group.localId, shoppingItem.quantity + 1)}
                 style={styles.quantityBtn}
               >
-                <IconSymbol name="plus.circle" size={24} color="#2563EB" />
+                <IconSymbol name="plus.circle" size={24} color={Brand.colors.primary} />
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() => removeItem(shoppingItem.product.id, group.localId)}
                 style={styles.removeBtn}
               >
-                <IconSymbol name="trash" size={20} color="#EF4444" />
+                <IconSymbol name="trash" size={20} color={Brand.colors.danger} />
               </TouchableOpacity>
             </View>
           </View>
@@ -101,18 +103,21 @@ export default function ShoppingListScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
-      <View style={styles.header}>
-        <ThemedText type="title">Mi Lista</ThemedText>
-        {items.length > 0 && (
-          <TouchableOpacity onPress={handleClearList}>
-            <ThemedText style={styles.clearText}>Limpiar</ThemedText>
-          </TouchableOpacity>
-        )}
-      </View>
+      <BrandHeader
+        title="Mi lista"
+        subtitle="Organizada por supermercado"
+        right={
+          items.length > 0 ? (
+            <TouchableOpacity onPress={handleClearList} activeOpacity={0.85}>
+              <ThemedText style={styles.clearText}>Limpiar</ThemedText>
+            </TouchableOpacity>
+          ) : null
+        }
+      />
 
       {items.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <IconSymbol name="cart.badge.plus" size={64} color="#D1D5DB" />
+          <IconSymbol name="cart.badge.plus" size={64} color={Brand.colors.border} />
           <ThemedText style={styles.emptyTitle}>Tu lista está vacía</ThemedText>
           <ThemedText style={styles.emptySubtitle}>
             Escanea productos o búscalos para agregarlos aquí y ahorrar en tus compras.
@@ -149,31 +154,29 @@ export default function ShoppingListScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 12,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    backgroundColor: Brand.colors.background,
   },
   clearText: {
-    color: "#EF4444",
+    color: Brand.colors.white,
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "900",
+    backgroundColor: "rgba(0,0,0,0.18)",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 999,
   },
   listContent: {
     paddingHorizontal: 20,
     paddingBottom: 20,
+    paddingTop: 16,
   },
   groupContainer: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: Brand.colors.border,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -186,17 +189,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
+    borderBottomColor: Brand.colors.border,
     paddingBottom: 10,
   },
   groupTitle: {
     fontSize: 18,
-    color: "#2563EB",
+    color: Brand.colors.text,
   },
   groupTotal: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#059669",
+    color: Brand.colors.primary,
   },
   itemCard: {
     flexDirection: "row",
@@ -210,11 +213,11 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 15,
-    color: "#111827",
+    color: Brand.colors.text,
   },
   itemPrice: {
     fontSize: 13,
-    color: "#6B7280",
+    color: Brand.colors.muted,
   },
   quantityContainer: {
     flexDirection: "row",
@@ -244,18 +247,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 20,
-    color: "#374151",
+    color: Brand.colors.text,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     textAlign: "center",
     marginTop: 10,
     lineHeight: 20,
   },
   startShoppingBtn: {
     marginTop: 30,
-    backgroundColor: "#2563EB",
+    backgroundColor: Brand.colors.primary,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
@@ -266,10 +269,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   footer: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Brand.colors.card,
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
+    borderTopColor: Brand.colors.border,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.05,
@@ -285,16 +288,16 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#111827",
+    color: Brand.colors.text,
   },
   totalValue: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#059669",
+    color: Brand.colors.primary,
   },
   footerSubtitle: {
     fontSize: 12,
-    color: "#6B7280",
+    color: Brand.colors.muted,
     textAlign: "center",
     marginTop: 5,
   },
