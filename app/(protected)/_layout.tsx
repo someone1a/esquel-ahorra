@@ -1,4 +1,5 @@
 import { router, Tabs } from "expo-router";
+import Head from "expo-router/head";
 import React, { useEffect } from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
@@ -29,14 +30,18 @@ export default function ProtectedLayout() {
   const isAdmin = role === "admin";
   const canUseSupervisor = role === "supervisor" || isAdmin;
  
-   return (
-     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}
-    >
+  return (
+    <>
+      <Head>
+        <meta name="robots" content="noindex,nofollow" />
+      </Head>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          headerShown: false,
+          tabBarButton: HapticTab,
+        }}
+      >
       <Tabs.Screen
         name="index"
         options={{
@@ -153,6 +158,7 @@ export default function ProtectedLayout() {
           ),
         }}
       />
-    </Tabs>
+      </Tabs>
+    </>
   );
 }

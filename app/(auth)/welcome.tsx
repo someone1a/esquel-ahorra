@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import Head from "expo-router/head";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 
@@ -7,8 +8,37 @@ import { ThemedView } from "@/components/themed-view";
 import { Brand } from "@/utils/constants/brand";
 
 export default function WelcomeScreen() {
+  const siteUrl =
+    process.env.EXPO_PUBLIC_SITE_URL ?? "https://esquei-ahorra.online";
+  const title = "Esquel Ahorra | Compará precios en Esquel";
+  const description =
+    "Esquel Ahorra te ayuda a comparar precios en distintos comercios de Esquel para ahorrar en tus compras.";
+
   return (
     <ThemedView safeArea style={styles.container}>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="robots" content="index,follow,max-image-preview:large" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={`${siteUrl}/welcome`} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <link rel="canonical" href={`${siteUrl}/welcome`} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Esquel Ahorra",
+              url: siteUrl,
+            }),
+          }}
+        />
+      </Head>
       <ThemedView style={styles.content}>
         <Image
           source={require("../../assets/images/logo.png")}
@@ -18,9 +48,7 @@ export default function WelcomeScreen() {
         <ThemedText type="title" style={styles.title}>
           Esquel Ahorra
         </ThemedText>
-        <ThemedText style={styles.subtitle}>
-          Tu aliada en tus compras.
-        </ThemedText>
+        <ThemedText style={styles.subtitle}>Tu aliada en tus compras.</ThemedText>
         <ThemedText style={styles.description}>
           Te ayuda a comparar los precios en distintos comercios de Esquel.
         </ThemedText>

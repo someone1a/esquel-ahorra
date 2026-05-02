@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
+import Head from "expo-router/head";
 import React, { useEffect, useState } from "react";
 import {
-    Alert,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -100,6 +101,10 @@ export default function RegisterScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
+      <Head>
+        <title>Crear cuenta | Esquel Ahorra</title>
+        <meta name="robots" content="noindex,nofollow" />
+      </Head>
       <ThemedText style={styles.title}>Registrarse</ThemedText>
 
       {rolFromQuery ? (

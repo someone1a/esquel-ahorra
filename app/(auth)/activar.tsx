@@ -1,5 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
+import Head from "expo-router/head";
 import React, { useEffect, useMemo } from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
@@ -31,6 +32,10 @@ export default function ActivationScreen() {
 
   return (
     <ThemedView safeArea style={styles.centerContainer}>
+      <Head>
+        <title>Invitación de supervisor | Esquel Ahorra</title>
+        <meta name="robots" content="noindex,nofollow" />
+      </Head>
       <MaterialIcons name="verified-user" size={64} color={Brand.colors.primary} />
       <ThemedText type="subtitle" style={styles.title}>
         Invitación de supervisor
@@ -89,4 +94,3 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
 });
-

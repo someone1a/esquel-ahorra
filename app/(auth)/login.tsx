@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
+import Head from "expo-router/head";
 import React, { useState } from "react";
 import {
-    Alert,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -44,6 +45,10 @@ export default function LoginScreen() {
 
   return (
     <ThemedView safeArea style={styles.container}>
+      <Head>
+        <title>Iniciar sesión | Esquel Ahorra</title>
+        <meta name="robots" content="noindex,nofollow" />
+      </Head>
       <ThemedText style={styles.title}>Iniciar Sesión</ThemedText>
 
       <TextInput
