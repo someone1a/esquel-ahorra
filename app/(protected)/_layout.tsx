@@ -13,7 +13,7 @@ export default function ProtectedLayout() {
 
   useEffect(() => {
     if (!isLoading && !token) {
-      router.replace("/welcome");
+      router.replace("/login");
     }
   }, [token, isLoading]);
 

@@ -3,6 +3,12 @@ export interface Price {
   product_id: number;
   local_id: number;
   precio: number;
+  created_at: string;
+  updated_at: string;
+  updated_by?: number | null;
+  verificado?: string;
+  verificado_por?: number | null;
+  verificado_en?: string | null;
 }
 
 export interface Barcode {
@@ -14,6 +20,10 @@ export interface Barcode {
 export interface Product {
   id: number;
   nombre: string;
+  marca?: string | null;
+  presentacion?: string | null;
+  categoria?: string | null;
+  imagen_url?: string | null;
   barcodes: Barcode[] | null;
   prices: Price[] | null;
 }

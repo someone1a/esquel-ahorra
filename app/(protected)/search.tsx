@@ -146,7 +146,9 @@ export default function SearchScreen() {
       {hasSearched ? (
         <View style={styles.resultsSection}>
           <View style={styles.sectionHeader}>
-            <ThemedText type="subtitle">Resultados</ThemedText>
+            <ThemedText type="subtitle" lightColor={Brand.colors.text} darkColor={Brand.colors.text}>
+              Resultados
+            </ThemedText>
             <TouchableOpacity onPress={() => {
               setHasSearched(false);
               setSearchQuery("");
@@ -170,7 +172,7 @@ export default function SearchScreen() {
         </View>
       ) : (
         <View style={styles.localsSection}>
-          <ThemedText type="subtitle" style={styles.sectionTitle}>
+          <ThemedText type="subtitle" style={styles.sectionTitle} lightColor="#000000" darkColor="#FFFFFF">
             Locales en Esquel
           </ThemedText>
 
@@ -200,7 +202,7 @@ export default function SearchScreen() {
                 </TouchableOpacity>
               )}
               ListEmptyComponent={
-                <ThemedText>No se encontraron locales.</ThemedText>
+                <ThemedText style={styles.emptyText}>No se encontraron locales.</ThemedText>
               }
             />
           )}

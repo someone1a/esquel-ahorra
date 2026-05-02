@@ -19,7 +19,7 @@ export default function ProfileScreen() {
           : true;
       if (!confirmed) return;
       await logout();
-      router.replace("/welcome");
+      router.replace("/login");
       return;
     }
 
@@ -30,9 +30,7 @@ export default function ProfileScreen() {
         style: "destructive",
         onPress: async () => {
           await logout();
-          if (Platform.OS !== "web") {
-            router.replace("/welcome");
-          }
+          router.replace("/login");
         },
       },
     ]);

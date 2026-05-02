@@ -1,4 +1,4 @@
-import { ActivateRequest, LoginRequest, RegisterRequest, Token, User, ValidateTokenResponse } from "@/types/auth";
+import { LoginRequest, RegisterRequest, Token, User } from "@/types/auth";
 import { api } from "./api";
 
 export const authService = {
@@ -15,20 +15,13 @@ export const authService = {
   },
 
   async refreshToken(refreshToken: string): Promise<Token> {
-    return api.post(`/auth/refresh?refresh_token=${refreshToken}`);
+    return api.post(`/auth/refresh?refresh_token=${encodeURIComponent(refreshToken)}`);
   },
 
-  async logout(): Promise<void> {
-    await api.post("/auth/logout", undefined);
+  async logout(refreshToken?: string): Promise<void> {
+    if (!refreshToken) return;
+    await api.post(`/auth/logout?refresh_token=${encodeURIComponent(refreshToken)}`, undefined);
   },
-
-  async validateActivationToken(token: string): Promise<ValidateTokenResponse> {
-    return api.get(`/auth/activate/validate?token=${token}`);
-  },
-
-  async activateAccount(data: ActivateRequest): Promise<void> {
-     return api.post("/auth/activate", data);
-   },
  
    async inviteSupervisor(email: string): Promise<void> {
      return api.post("/auth/invite", { email });

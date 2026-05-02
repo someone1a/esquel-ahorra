@@ -109,6 +109,7 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Nombre"
+        placeholderTextColor={Brand.colors.muted}
         value={name}
         onChangeText={setName}
         autoCapitalize="words"
@@ -117,6 +118,7 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Apellido"
+        placeholderTextColor={Brand.colors.muted}
         value={lastname}
         onChangeText={setLastname}
         autoCapitalize="words"
@@ -125,6 +127,7 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Correo electrónico"
+        placeholderTextColor={Brand.colors.muted}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -134,6 +137,7 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Código de invitación"
+        placeholderTextColor={Brand.colors.muted}
         value={referralCode}
         onChangeText={setReferralCode}
         autoCapitalize="characters"
@@ -149,6 +153,7 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Contraseña"
+        placeholderTextColor={Brand.colors.muted}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -157,6 +162,7 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Confirmar contraseña"
+        placeholderTextColor={Brand.colors.muted}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry

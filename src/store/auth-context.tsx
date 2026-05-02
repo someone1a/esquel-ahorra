@@ -1,8 +1,15 @@
+import {
+  clearAuthStorage,
+  getAuthSnapshot,
+  getRefreshToken,
+  setTokens,
+  setUser as setStoredUser,
+  subscribeAuth,
+} from "@/auth/session";
 import { authService } from "@/services/auth";
 import { Token, User } from "@/types/auth";
-import { storage } from "@/utils/storage";
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { Platform } from "react-native";
+import { router } from "expo-router";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 interface AuthContextType {
   user: User | null;
@@ -15,57 +22,40 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const TOKEN_KEY = "auth_token";
-const REFRESH_TOKEN_KEY = "auth_refresh_token";
-const USER_KEY = "auth_user";
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const logout = useCallback(async () => {
+    const refreshToken = await getRefreshToken().catch(() => null);
     try {
-      await authService.logout();
+      await authService.logout(refreshToken ?? undefined);
     } catch {}
 
+    await clearAuthStorage();
     setToken(null);
     setUser(null);
-
-    if (Platform.OS === "web") {
-      await storage.clear();
-      window.location.replace("/welcome");
-    } else {
-      await storage.removeItem(TOKEN_KEY);
-      await storage.removeItem(REFRESH_TOKEN_KEY);
-      await storage.removeItem(USER_KEY);
-    }
+    router.replace("/login");
   }, []);
 
   const loadStoredAuth = useCallback(async () => {
     try {
-      const storedToken = await storage.getItem(TOKEN_KEY);
-      const storedUser = await storage.getItem(USER_KEY);
+      const snap = await getAuthSnapshot();
 
-      if (storedToken && storedUser) {
-        setToken(storedToken);
-        setUser(JSON.parse(storedUser));
-        
-        // Validar el token con el backend al iniciar
-        try {
-          const userData = await authService.getMe();
-          setUser(userData);
-          await storage.setItem(USER_KEY, JSON.stringify(userData));
-        } catch (error: any) {
-          console.error("Token invalid or expired on boot:", error);
-          // Si el error es 401, limpiar la sesión
-          if (error.message === "Unauthorized" || error.status === 401) {
-            await logout();
-          }
-        }
-      }
+      setToken(snap.tokens?.accessToken ?? null);
+      setUser(snap.user);
+
+      if (!snap.tokens) return;
+
+      const userData = await authService.getMe();
+      setUser(userData);
+      await setStoredUser(userData);
     } catch (error) {
-      console.error("Error loading auth data:", error);
+      if ((error as any)?.status === 401 || (error as any)?.message === "Unauthorized") {
+        await logout();
+        return;
+      }
     } finally {
       setIsLoading(false);
     }
@@ -75,34 +65,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadStoredAuth();
   }, [loadStoredAuth]);
 
-  const refreshUser = async () => {
-    try {
-      const userData = await authService.getMe();
-      setUser(userData);
-      await storage.setItem(USER_KEY, JSON.stringify(userData));
-    } catch (error) {
-      console.error("Error refreshing user profile:", error);
-    }
-  };
+  useEffect(() => {
+    const unsubscribe = subscribeAuth((snap) => {
+      setToken(snap.tokens?.accessToken ?? null);
+      setUser(snap.user);
+    });
+    return unsubscribe;
+  }, []);
 
-  const login = async (tokenData: Token) => {
-    setToken(tokenData.access_token);
-    
-    await storage.setItem(TOKEN_KEY, tokenData.access_token);
-    await storage.setItem(REFRESH_TOKEN_KEY, tokenData.refresh_token);
-    
-    // Fetch user profile after login
+  const refreshUser = useCallback(async () => {
     try {
       const userData = await authService.getMe();
       setUser(userData);
-      await storage.setItem(USER_KEY, JSON.stringify(userData));
+      await setStoredUser(userData);
     } catch (error) {
-      console.error("Error fetching user profile after login:", error);
+      if ((error as any)?.status === 401 || (error as any)?.message === "Unauthorized") {
+        await logout();
+      }
     }
-  };
+  }, [logout]);
+
+  const login = useCallback(async (tokenData: Token) => {
+    await setTokens(tokenData);
+    setToken(tokenData.access_token);
+
+    try {
+      const userData = await authService.getMe();
+      setUser(userData);
+      await setStoredUser(userData);
+    } catch {
+      await setStoredUser(null);
+    }
+  }, []);
+
+  const value = useMemo(
+    () => ({ user, token, isLoading, login, logout, refreshUser }),
+    [user, token, isLoading, login, logout, refreshUser]
+  );
 
   return (
-    <AuthContext.Provider value={{ user, token, isLoading, login, logout, refreshUser }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
